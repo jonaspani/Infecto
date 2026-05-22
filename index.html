@@ -455,8 +455,9 @@ td.td-actions { white-space: nowrap; }
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 24px 16px;
+  padding: 16px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .modal {
   background: var(--bg-card);
@@ -465,6 +466,8 @@ td.td-actions { white-space: nowrap; }
   max-width: 760px;
   box-shadow: 0 20px 40px rgba(0,0,0,.2);
   overflow: hidden;
+  margin: auto 0;
+  flex-shrink: 0;
 }
 .modal-header {
   background: var(--navy);
@@ -756,8 +759,9 @@ mark { background: #fef9c3; border-radius: 2px; padding: 0 2px; }
 }
 
 @media (max-width: 480px) {
-  .modal { border-radius: 0; }
-  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal-overlay { padding: 12px 8px; align-items: flex-start; }
+  .modal { border-radius: var(--radius-lg); }
+  .modal-body { padding: 14px; }
 }
 
 .view-pane { display: none; }
