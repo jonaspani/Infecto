@@ -455,9 +455,8 @@ td.td-actions { white-space: nowrap; }
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 16px;
+  padding: 24px 16px;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 .modal {
   background: var(--bg-card);
@@ -466,8 +465,6 @@ td.td-actions { white-space: nowrap; }
   max-width: 760px;
   box-shadow: 0 20px 40px rgba(0,0,0,.2);
   overflow: hidden;
-  margin: auto 0;
-  flex-shrink: 0;
 }
 .modal-header {
   background: var(--navy);
@@ -759,9 +756,8 @@ mark { background: #fef9c3; border-radius: 2px; padding: 0 2px; }
 }
 
 @media (max-width: 480px) {
-  .modal-overlay { padding: 12px 8px; align-items: flex-start; }
-  .modal { border-radius: var(--radius-lg); }
-  .modal-body { padding: 14px; }
+  .modal { border-radius: 0; }
+  .modal-overlay { padding: 0; align-items: flex-end; }
 }
 
 .view-pane { display: none; }
@@ -1047,8 +1043,9 @@ mark { background: #fef9c3; border-radius: 2px; padding: 0 2px; }
 // CONFIGURACIÓN
 // ═══════════════════════════════════════════
 const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
-const BIN_ID = '6a1044fc6610dd3ae88931c6';
-const API_KEY = '$2a$10$6c0dZOH07xqt.KdlmrNBgeR5v89c1ip3gDlbbBIZTQwXgxDgp7J/u';
+// IMPORTANTE: reemplazar con tu BIN ID y API KEY de JSONBin.io
+const BIN_ID = localStorage.getItem('infect_bin_id') || '';
+const API_KEY = localStorage.getItem('infect_api_key') || '';
 
 const SALAS = [
   'NEUROTÓXICO','SALA 3','SALA 2','UTI','TRAUMA MUJERES',
@@ -1537,6 +1534,27 @@ function showToast(msg, type = '') {
 // ═══════════════════════════════════════════
 // CONFIGURACIÓN JSONBIN
 // ═══════════════════════════════════════════
+function checkConfig() {
+  if (!BIN_ID || !API_KEY) {
+    const msg = `CONFIGURACIÓN JSONBIN.io
+
+Para conectar la base de datos en la nube:
+1. Creá una cuenta en https://jsonbin.io
+2. Creá un nuevo BIN con el contenido: {"patients":[]}
+3. Copiá tu BIN ID y tu API KEY (X-Master-Key)
+
+BIN ID (pegar aquí):`;
+    const bin = prompt(msg);
+    if (bin) {
+      const key = prompt('API KEY (X-Master-Key):');
+      if (key) {
+        localStorage.setItem('infect_bin_id', bin.trim());
+        localStorage.setItem('infect_api_key', key.trim());
+        location.reload();
+      }
+    }
+  }
+}
 
 // ═══════════════════════════════════════════
 // DATOS DEMO
