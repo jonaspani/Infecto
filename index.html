@@ -53,7 +53,7 @@ body {
   background: var(--navy);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 50;
   box-shadow: 0 2px 8px rgba(0,0,0,.25);
 }
 
@@ -197,6 +197,8 @@ body {
   display: none;
   flex-direction: column;
   background: var(--navy-dark);
+  position: relative;
+  z-index: 60;
   padding: 8px 16px 16px;
   gap: 4px;
 }
@@ -426,6 +428,80 @@ td.td-actions { white-space: nowrap; }
 .alta-info .details { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
 .alta-card .btn-icon { align-self: center; }
 
+
+/* ── CULTIVO ENTRIES (formulario) ── */
+.cultivo-entries { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
+.cultivo-entry-row {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  position: relative;
+}
+.cultivo-entry-row .ce-full { grid-column: 1 / -1; }
+.cultivo-entry-row input,
+.cultivo-entry-row select,
+.cultivo-entry-row textarea {
+  background: white;
+  border: 1px solid var(--border-strong);
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+}
+.cultivo-entry-row input:focus,
+.cultivo-entry-row select:focus,
+.cultivo-entry-row textarea:focus { border-color: var(--accent); }
+.cultivo-entry-row textarea { resize: vertical; min-height: 44px; }
+.cultivo-entry-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  margin-bottom: 2px;
+}
+.ce-remove-btn {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: none; border: none;
+  color: var(--danger); cursor: pointer;
+  font-size: 14px; width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px;
+}
+.ce-remove-btn:hover { background: var(--danger-light); }
+
+/* ── CULTIVO CARDS mejoradas ── */
+.cultivo-card { cursor: pointer; }
+.cultivo-studies { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.cultivo-study {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12.5px;
+}
+.cultivo-study-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+.cultivo-study-name { font-weight: 600; color: var(--text); }
+.cultivo-study-date { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+.cultivo-study-resultado { color: var(--text-secondary); margin-top: 2px; }
+@media (max-width: 480px) {
+  .cultivo-entry-row { grid-template-columns: 1fr; }
+  .cultivo-entry-row .ce-full { grid-column: 1; }
+}
+
 /* ── CULTIVOS VIEW ── */
 .cultivos-list {
   display: flex;
@@ -452,7 +528,7 @@ td.td-actions { white-space: nowrap; }
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,.5);
-  z-index: 200;
+  z-index: 500;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   padding: 20px 16px 60px;
@@ -1154,11 +1230,11 @@ mark { background: #fef9c3; border-radius: 2px; padding: 0 2px; }
 
       <div class="modal-section">
         <h3>Estudios microbiológicos</h3>
-        <div class="form-grid one">
-          <div class="form-group">
-            <textarea id="f-micro" placeholder="Hemocultivos, urocultivo, cultivo de herida, etc..."></textarea>
-          </div>
-        </div>
+        <div class="cultivo-entries" id="cultivo-list"></div>
+        <button class="btn-abx-add" onclick="addCultivoRow()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Agregar estudio microbiológico
+        </button>
       </div>
 
       <div class="modal-section">
@@ -1345,10 +1421,16 @@ function renderAbxPase(p) {
 
 function renderPendientes(p) {
   const pendientes = [];
-  const micro = (p.microbiologia || '').toLowerCase();
+  // cultivos estructurados en curso
+  const cultEnCurso = (p.cultivos || []).filter(c => c.estado === 'en_curso');
+  if (cultEnCurso.length) pendientes.push(`Cultivo${cultEnCurso.length > 1 ? 's' : ''} (${cultEnCurso.length})`);
+  // legacy texto
+  if (!p.cultivos || !p.cultivos.length) {
+    const micro = (p.microbiologia || '').toLowerCase();
+    if (micro.includes('pendiente') || micro.includes('en proceso') || micro.includes('espera')) pendientes.push('Cultivos');
+  }
   const examenes = (p.examenes || '').toLowerCase();
   const serologias = (p.serologias || '').toLowerCase();
-  if (micro.includes('pendiente') || micro.includes('en proceso') || micro.includes('espera')) pendientes.push('Cultivos');
   if (examenes.includes('pendiente') || examenes.includes('en espera') || examenes.includes('solicitado')) pendientes.push('Lab/Imágenes');
   if (serologias.includes('pendiente') || serologias.includes('en espera') || serologias.includes('solicitado')) pendientes.push('Serologías');
   if (!pendientes.length) return '';
@@ -1447,7 +1529,14 @@ function renderPacientes() {
       <td class="td-long">${hl(p.antecedentes || '—')}</td>
       <td class="td-long">${lastEvol ? `<div style="font-size:11px;color:#64748b;font-family:var(--mono);margin-bottom:2px">${fmtDate(lastEvol.fecha)}</div>${hl(lastEvol.texto || '')}` : '—'}</td>
       <td class="td-long">${hl(p.examenes || '—')}</td>
-      <td class="td-long">${hl(p.microbiologia || '—')}</td>
+      <td class="td-long">${(() => {
+        const cc = p.cultivos || [];
+        if (!cc.length) return hl(p.microbiologia || '—');
+        return cc.map(c => {
+          const info = estadoCultivoInfo(c.estado);
+          return `<div style="margin-bottom:3px"><span class="badge ${info.badge}" style="font-size:10px">${info.label}</span> <span style="font-size:12px">${c.muestra||''}</span></div>`;
+        }).join('');
+      })()}</td>
       <td class="td-long">${hl(p.serologias || '—')}</td>
       ${editMode ? `<td class="td-actions" onclick="event.stopPropagation()">
         <button class="btn-icon" onclick="openEditModal('${p.id}')">✏️ Editar</button>
@@ -1487,10 +1576,18 @@ function renderAltas() {
   ).join('');
 }
 
+function estadoCultivoInfo(estado) {
+  switch(estado) {
+    case 'positivo':    return { cls:'positivo', label:'Positivo',    badge:'badge-red' };
+    case 'negativo':    return { cls:'negativo', label:'Sin desarrollo', badge:'badge-green' };
+    case 'contaminado': return { cls:'',          label:'Contaminado', badge:'badge-yellow' };
+    default:            return { cls:'',          label:'En curso',   badge:'badge-yellow' };
+  }
+}
+
 function renderCultivos() {
   const list = document.getElementById('cultivos-list');
-  // Mostrar pacientes que tienen algo en microbiología
-  const all = filtered().filter(p => p.microbiologia && p.microbiologia.trim());
+  const all = filtered().filter(p => (p.cultivos && p.cultivos.length) || (p.microbiologia && p.microbiologia.trim()));
   document.getElementById('cult-meta').textContent = `${all.length} paciente${all.length !== 1 ? 's' : ''} con cultivos`;
 
   if (!all.length) {
@@ -1499,18 +1596,42 @@ function renderCultivos() {
   }
 
   list.innerHTML = all.map(p => {
-    const micro = (p.microbiologia || '').toLowerCase();
-    let cls = '', estado = 'En curso';
-    if (micro.includes('negativo') || micro.includes('sin desarrollo')) { cls = 'negativo'; estado = 'Negativo'; }
-    else if (micro.includes('positivo') || micro.includes('aislamiento') || micro.includes('desarrollo')) { cls = 'positivo'; estado = 'Positivo'; }
+    const cultivos = p.cultivos || [];
+    // clasificación general del paciente según sus cultivos
+    const haPos  = cultivos.some(c => c.estado === 'positivo');
+    const allNeg = cultivos.length > 0 && cultivos.every(c => c.estado === 'negativo');
+    const hasCurso = cultivos.some(c => c.estado === 'en_curso');
+    const cardCls = haPos ? 'positivo' : allNeg ? 'negativo' : '';
+    const totalLabel = haPos ? 'Positivo' : allNeg ? 'Negativo' : hasCurso ? 'En curso' : 'Ver detalle';
+    const totalBadge = haPos ? 'badge-red' : allNeg ? 'badge-green' : 'badge-yellow';
 
-    return `<div class="cultivo-card ${cls}" onclick="openDetail('${p.id}')" style="cursor:pointer">
+    const estudiosHtml = cultivos.length
+      ? `<div class="cultivo-studies">
+          ${cultivos.map(c => {
+            const info = estadoCultivoInfo(c.estado);
+            return `<div class="cultivo-study">
+              <div class="cultivo-study-header">
+                <span class="cultivo-study-name">${c.muestra || '—'}</span>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span class="cultivo-study-date">${fmtDate(c.fecha)}</span>
+                  <span class="badge ${info.badge}" style="font-size:10px">${info.label}</span>
+                </div>
+              </div>
+              ${c.resultado ? `<div class="cultivo-study-resultado">${c.resultado}</div>` : ''}
+            </div>`;
+          }).join('')}
+        </div>`
+      : `<div class="cultivo-detail">${hl(p.microbiologia || '')}</div>`;
+
+    return `<div class="cultivo-card ${cardCls}" onclick="openDetail('${p.id}')">
       <div class="cultivo-top">
-        <div class="cultivo-patient">${hl(p.nombre)}</div>
-        <span class="badge ${cls === 'negativo' ? 'badge-green' : cls === 'positivo' ? 'badge-red' : 'badge-yellow'}">${estado}</span>
+        <div>
+          <div class="cultivo-patient">${hl(p.nombre)}</div>
+          <div class="cultivo-meta">DNI ${p.dni} &nbsp;·&nbsp; ${p.sala || '—'} &nbsp;·&nbsp; ${hl(p.diagnostico || '—')}</div>
+        </div>
+        <span class="badge ${totalBadge}">${totalLabel}</span>
       </div>
-      <div class="cultivo-meta">DNI ${p.dni} &nbsp;·&nbsp; ${p.sala || '—'} &nbsp;·&nbsp; ${p.diagnostico || '—'}</div>
-      <div class="cultivo-detail">${hl(p.microbiologia)}</div>
+      ${estudiosHtml}
       ${editMode ? `<div style="margin-top:8px" onclick="event.stopPropagation()">
         <button class="btn-icon" onclick="openEditModal('${p.id}')">✏️ Editar</button>
       </div>` : ''}
@@ -1549,7 +1670,24 @@ function openDetail(id) {
         <div class="evol-text">${e.texto||''}</div>
       </div>`).join('')) : section('Evolución diaria', '<div class="detail-content">—</div>')}
     ${section('Exámenes complementarios', `<div class="detail-content">${p.examenes||'—'}</div>`)}
-    ${section('Estudios microbiológicos', `<div class="detail-content">${p.microbiologia||'—'}</div>`)}
+    ${section('Estudios microbiológicos', (() => {
+      const cultivos = p.cultivos || [];
+      if (!cultivos.length && !p.microbiologia) return '<div class="detail-content">—</div>';
+      if (!cultivos.length) return `<div class="detail-content">${p.microbiologia}</div>`;
+      return cultivos.map(c => {
+        const info = estadoCultivoInfo(c.estado);
+        return `<div class="cultivo-study" style="margin-bottom:6px">
+          <div class="cultivo-study-header">
+            <span class="cultivo-study-name">${c.muestra||'—'}</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span class="cultivo-study-date">${fmtDate(c.fecha)}</span>
+              <span class="badge ${info.badge}">${info.label}</span>
+            </div>
+          </div>
+          ${c.resultado ? `<div class="cultivo-study-resultado">${c.resultado}</div>` : ''}
+        </div>`;
+      }).join('');
+    })())}
     ${section('Serologías', `<div class="detail-content">${p.serologias||'—'}</div>`)}
   `;
 
@@ -1603,7 +1741,11 @@ function openEditModal(id) {
   document.getElementById('f-diagnostico').value = p.diagnostico || '';
   document.getElementById('f-antecedentes').value = p.antecedentes || '';
   document.getElementById('f-examenes').value = p.examenes || '';
-  document.getElementById('f-micro').value = p.microbiologia || '';
+  (p.cultivos || []).forEach(c => addCultivoRow(c));
+  // compatibilidad con campo legacy
+  if ((!p.cultivos || !p.cultivos.length) && p.microbiologia) {
+    addCultivoRow({ muestra: 'Ver texto', resultado: p.microbiologia, estado: 'en_curso', fecha: '' });
+  }
   document.getElementById('f-serologias').value = p.serologias || '';
   (p.antibioticos || []).forEach(a => addAbxRow(a));
   (p.evoluciones || []).forEach(e => addEvolRow(e));
@@ -1611,13 +1753,14 @@ function openEditModal(id) {
 }
 
 function clearForm() {
-  ['f-nombre','f-dni','f-diagnostico','f-antecedentes','f-examenes','f-micro','f-serologias'].forEach(id => {
+  ['f-nombre','f-dni','f-diagnostico','f-antecedentes','f-examenes','f-serologias'].forEach(id => {
     document.getElementById(id).value = '';
   });
   document.getElementById('f-sala').value = '';
   document.getElementById('f-alta').checked = false;
   document.getElementById('abx-list').innerHTML = '';
   document.getElementById('evol-list').innerHTML = '';
+  document.getElementById('cultivo-list').innerHTML = '';
 }
 
 function closeEditModal() {
@@ -1633,6 +1776,36 @@ function addAbxRow(data = {}) {
     <input type="date" value="${data.inicio||''}">
     <input type="date" value="${data.fin||''}">
     <button class="btn-abx-remove" onclick="this.parentElement.remove()">✕</button>
+  `;
+  list.appendChild(row);
+}
+
+function addCultivoRow(data = {}) {
+  const list = document.getElementById('cultivo-list');
+  const row = document.createElement('div');
+  row.className = 'cultivo-entry-row';
+  const estados = ['en_curso','positivo','negativo','contaminado'];
+  const estadoLabels = {'en_curso':'En curso','positivo':'Positivo','negativo':'Negativo / Sin desarrollo','contaminado':'Contaminado'};
+  row.innerHTML = `
+    <button class="ce-remove-btn" onclick="this.parentElement.remove()">✕</button>
+    <div>
+      <div class="cultivo-entry-label">Fecha</div>
+      <input type="date" name="ce-fecha" value="${data.fecha||new Date().toISOString().slice(0,10)}">
+    </div>
+    <div>
+      <div class="cultivo-entry-label">Muestra / Tipo</div>
+      <input type="text" name="ce-muestra" placeholder="Ej: Hemocultivo, Urocultivo, LCR..." value="${data.muestra||''}">
+    </div>
+    <div class="ce-full">
+      <div class="cultivo-entry-label">Resultado / Germen / Sensibilidad</div>
+      <textarea name="ce-resultado" placeholder="Ej: Klebsiella pneumoniae BLEE+, sensible a meropenem...">${data.resultado||''}</textarea>
+    </div>
+    <div class="ce-full">
+      <div class="cultivo-entry-label">Estado</div>
+      <select name="ce-estado">
+        ${estados.map(e => `<option value="${e}" ${data.estado===e?'selected':''}>${estadoLabels[e]}</option>`).join('')}
+      </select>
+    </div>
   `;
   list.appendChild(row);
 }
@@ -1680,7 +1853,12 @@ async function savePatient() {
     antecedentes: document.getElementById('f-antecedentes').value.trim(),
     evoluciones,
     examenes: document.getElementById('f-examenes').value.trim(),
-    microbiologia: document.getElementById('f-micro').value.trim(),
+    cultivos: Array.from(document.querySelectorAll('.cultivo-entry-row')).map(row => ({
+      fecha: row.querySelector('[name="ce-fecha"]').value,
+      muestra: row.querySelector('[name="ce-muestra"]').value.trim(),
+      resultado: row.querySelector('[name="ce-resultado"]').value.trim(),
+      estado: row.querySelector('[name="ce-estado"]').value,
+    })).filter(c => c.muestra || c.resultado),
     serologias: document.getElementById('f-serologias').value.trim(),
   };
 
