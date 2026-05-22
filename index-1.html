@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infectología – Hospital Cullen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1a2744;
+  --navy-dark: #111d35;
+  --navy-light: #2a3a5e;
+  --accent: #3b82f6;
+  --accent-light: #dbeafe;
+  --accent-dark: #1d4ed8;
+  --success: #16a34a;
+  --success-light: #dcfce7;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --danger: #dc2626;
+  --danger-light: #fee2e2;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --font: 'IBM Plex Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.05);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── NAVBAR ── */
+#navbar {
+  background: var(--navy);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  height: 56px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.nav-logo {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-logo svg { width: 20px; height: 20px; fill: white; }
+
+.nav-title {
+  display: flex; flex-direction: column; line-height: 1.15;
+}
+.nav-title span:first-child {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: .3px;
+}
+.nav-title span:last-child {
+  color: #93c5fd;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.nav-center {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.nav-tab {
+  color: #93c5fd;
+  background: none;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.nav-tab:hover { background: rgba(255,255,255,.1); color: white; }
+.nav-tab.active { background: rgba(59,130,246,.3); color: white; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.search-wrap {
+  position: relative;
+}
+.search-wrap input {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: white;
+  border-radius: 6px;
+  padding: 6px 10px 6px 32px;
+  font-family: var(--font);
+  font-size: 13px;
+  width: 200px;
+  outline: none;
+  transition: background .15s, border-color .15s;
+}
+.search-wrap input::placeholder { color: rgba(255,255,255,.45); }
+.search-wrap input:focus { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.4); }
+.search-icon {
+  position: absolute;
+  left: 9px; top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,.5);
+  pointer-events: none;
+}
+
+.btn-mode {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: none;
+  color: white;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.btn-mode:hover { background: rgba(255,255,255,.1); }
+.btn-mode.edit-active { background: rgba(250,204,21,.2); border-color: rgba(250,204,21,.5); color: #fde68a; }
+
+.btn-new {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.btn-new:hover { background: #2563eb; }
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Mobile menu */
+#mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: var(--navy-dark);
+  padding: 8px 16px 16px;
+  gap: 4px;
+}
+#mobile-menu .nav-tab {
+  text-align: left;
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+#mobile-menu .mobile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+#mobile-menu .search-wrap input { width: 100%; }
+
+/* ── MAIN ── */
+main {
+  flex: 1;
+  padding: 24px 24px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── SECTION HEADING ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.page-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+}
+.page-header .meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── PASE VIEW ── */
+.pase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.sala-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.sala-header {
+  background: var(--navy);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sala-name {
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+.sala-count {
+  background: rgba(255,255,255,.15);
+  color: #bfdbfe;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.sala-patients {
+  padding: 8px 0;
+}
+
+.sala-empty {
+  padding: 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.patient-row {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+.patient-row:last-child { border-bottom: none; }
+.patient-row:hover { background: var(--bg-hover); }
+
+.patient-name {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.patient-dni {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+.patient-diag {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.patient-abx {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.badge {
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.badge-blue { background: var(--accent-light); color: #1e40af; }
+.badge-green { background: var(--success-light); color: #15803d; }
+.badge-yellow { background: var(--warning-light); color: #92400e; }
+.badge-red { background: var(--danger-light); color: #991b1b; }
+.badge-gray { background: #f1f5f9; color: #475569; }
+.badge-alta { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.badge-cultivo { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+
+/* ── TABLE VIEW ── */
+.table-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead th {
+  background: var(--navy);
+  color: #bfdbfe;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: 11px 14px;
+  text-align: left;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,.08);
+  position: sticky;
+  top: 0;
+}
+thead th:last-child { border-right: none; }
+tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--text);
+  max-width: 200px;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--bg-hover); }
+tbody tr.selected { background: #eff6ff; }
+
+td.td-name { font-weight: 600; white-space: nowrap; }
+td.td-mono { font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+td.td-long { min-width: 160px; max-width: 220px; }
+td.td-actions { white-space: nowrap; }
+
+.btn-icon {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: var(--font);
+  transition: background .1s, border-color .1s;
+  color: var(--text-secondary);
+  margin-right: 4px;
+}
+.btn-icon:hover { background: var(--bg-hover); border-color: var(--border-strong); color: var(--text); }
+.btn-icon.danger:hover { background: var(--danger-light); border-color: #fca5a5; color: var(--danger); }
+
+/* ── ALTAS VIEW ── */
+.altas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.alta-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.alta-card:hover { border-color: var(--border-strong); }
+.alta-info .name { font-weight: 600; font-size: 14px; }
+.alta-info .details { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
+.alta-card .btn-icon { align-self: center; }
+
+/* ── CULTIVOS VIEW ── */
+.cultivos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cultivo-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--warning);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+}
+.cultivo-card.positivo { border-left-color: var(--danger); }
+.cultivo-card.negativo { border-left-color: var(--success); }
+.cultivo-top { display: flex; align-items: center; justify-content: space-between; }
+.cultivo-patient { font-weight: 600; font-size: 14px; }
+.cultivo-meta { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.cultivo-detail { margin-top: 8px; font-size: 12.5px; color: var(--text); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 760px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.2);
+  overflow: hidden;
+}
+.modal-header {
+  background: var(--navy);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h2 { color: white; font-size: 16px; font-weight: 600; }
+.modal-close {
+  background: none; border: none;
+  color: #93c5fd; cursor: pointer; font-size: 20px;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px;
+}
+.modal-close:hover { background: rgba(255,255,255,.1); color: white; }
+
+.modal-body { padding: 20px; }
+.modal-section { margin-bottom: 18px; }
+.modal-section h3 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid.one { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.form-group input, .form-group textarea, .form-group select {
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(59,130,246,.15);
+}
+.form-group textarea { resize: vertical; min-height: 70px; }
+
+/* Antibióticos dinámicos */
+.abx-list { display: flex; flex-direction: column; gap: 8px; }
+.abx-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.abx-row input {
+  background: white;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  outline: none;
+}
+.abx-row input:focus { border-color: var(--accent); }
+.btn-abx-remove {
+  background: none; border: none;
+  color: var(--danger);
+  cursor: pointer; font-size: 16px;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px;
+}
+.btn-abx-remove:hover { background: var(--danger-light); }
+.btn-abx-add {
+  margin-top: 6px;
+  background: none;
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background .1s;
+  display: flex; align-items: center; gap: 5px;
+}
+.btn-abx-add:hover { background: var(--accent-light); }
+
+/* Evoluciones */
+.evol-list { display: flex; flex-direction: column; gap: 6px; }
+.evol-row {
+  display: grid;
+  grid-template-columns: 130px 1fr auto;
+  gap: 8px;
+  align-items: start;
+}
+.evol-row input[type="date"] {
+  background: white;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  outline: none;
+}
+.evol-row textarea {
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  outline: none;
+  resize: vertical;
+  min-height: 50px;
+}
+
+.modal-footer {
+  padding: 14px 20px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.btn-cancel {
+  background: none;
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-cancel:hover { background: var(--bg-hover); }
+.btn-save {
+  background: var(--navy);
+  border: none;
+  color: white;
+  padding: 8px 22px;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-save:hover { background: var(--navy-light); }
+
+/* Detail modal */
+.detail-section { margin-bottom: 16px; }
+.detail-section h3 {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  margin-bottom: 6px;
+}
+.detail-content {
+  font-size: 13.5px;
+  color: var(--text);
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+.evol-entry {
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+.evol-date {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-dark);
+  font-family: var(--mono);
+  margin-bottom: 3px;
+}
+.evol-text { font-size: 13px; }
+
+.abx-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.abx-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.abx-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.abx-table tr:last-child td { border-bottom: none; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--navy);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  z-index: 999;
+  transform: translateY(0);
+  opacity: 1;
+  transition: all .3s;
+}
+.toast.hidden { transform: translateY(20px); opacity: 0; pointer-events: none; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 20px; height: 20px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(255,255,255,.8);
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.loading-overlay .spinner {
+  border-color: rgba(26,39,68,.2);
+  border-top-color: var(--navy);
+}
+
+/* Alta checkbox */
+.alta-check { display: flex; align-items: center; gap: 8px; }
+.alta-check input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; }
+.alta-check label { font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; }
+
+/* Search highlight */
+mark { background: #fef9c3; border-radius: 2px; padding: 0 2px; }
+
+/* RESPONSIVE */
+@media (max-width: 860px) {
+  .nav-center { display: none; }
+  .nav-right .search-wrap,
+  .nav-right .btn-mode,
+  .nav-right .btn-new { display: none; }
+  .hamburger { display: flex; }
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: flex; }
+  main { padding: 16px 12px 32px; }
+  .pase-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .abx-row { grid-template-columns: 1fr 1fr; }
+  .abx-row input:first-child { grid-column: 1/-1; }
+}
+
+@media (max-width: 480px) {
+  .modal { border-radius: 0; }
+  .modal-overlay { padding: 0; align-items: flex-end; }
+}
+
+.view-pane { display: none; }
+.view-pane.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm1 14h-2v-1h2v1zm0-3h-2v-1h2v1zm-1-5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+          <path d="M11 7h2v4h-2z"/>
+        </svg>
+      </div>
+      <div class="nav-title">
+        <span>Infectología</span>
+        <span>Hospital Cullen · Santa Fe</span>
+      </div>
+    </div>
+
+    <div class="nav-center">
+      <button class="nav-tab active" onclick="showView('pase')">Pase</button>
+      <button class="nav-tab" onclick="showView('pacientes')">Pacientes</button>
+      <button class="nav-tab" onclick="showView('altas')">Altas</button>
+      <button class="nav-tab" onclick="showView('cultivos')">Cultivos</button>
+    </div>
+
+    <div class="nav-right">
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Buscar paciente..." oninput="onSearch(this.value)">
+      </div>
+      <button class="btn-mode" id="btn-mode" onclick="toggleMode()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        <span id="mode-label">Modo Vista</span>
+      </button>
+      <button class="btn-new" id="btn-new" style="display:none" onclick="openNewModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        Nueva interconsulta
+      </button>
+    </div>
+
+    <button class="hamburger" onclick="toggleMobile()" aria-label="Menú">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12h18M3 6h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu">
+    <button class="nav-tab active" onclick="showView('pase');toggleMobile()">Pase</button>
+    <button class="nav-tab" onclick="showView('pacientes');toggleMobile()">Pacientes</button>
+    <button class="nav-tab" onclick="showView('altas');toggleMobile()">Altas</button>
+    <button class="nav-tab" onclick="showView('cultivos');toggleMobile()">Cultivos</button>
+    <div class="mobile-actions">
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Buscar paciente..." oninput="onSearch(this.value);document.getElementById('search-input').value=this.value">
+      </div>
+      <button class="btn-mode" onclick="toggleMode()" style="justify-content:center">
+        <span id="mode-label-mobile">Modo Vista</span>
+      </button>
+      <button class="btn-new" id="btn-new-mobile" style="display:none;justify-content:center" onclick="openNewModal();toggleMobile()">
+        + Nueva interconsulta
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <!-- PASE -->
+  <div id="view-pase" class="view-pane active">
+    <div class="page-header">
+      <div>
+        <h1>Pase diario</h1>
+        <div class="meta" id="pase-meta">Cargando...</div>
+      </div>
+    </div>
+    <div class="pase-grid" id="pase-grid"></div>
+  </div>
+
+  <!-- PACIENTES -->
+  <div id="view-pacientes" class="view-pane">
+    <div class="page-header">
+      <div>
+        <h1>Interconsultas activas</h1>
+        <div class="meta" id="pac-meta">Cargando...</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>DNI</th>
+            <th>Sala</th>
+            <th>Diagnóstico/s</th>
+            <th>Antibiótico/s</th>
+            <th>Antecedentes / Motivo</th>
+            <th>Últ. evolución</th>
+            <th>Exámenes compl.</th>
+            <th>Microbiología</th>
+            <th>Serologías</th>
+            <th id="th-actions" style="display:none">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="pac-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ALTAS -->
+  <div id="view-altas" class="view-pane">
+    <div class="page-header">
+      <div>
+        <h1>Altas de seguimiento</h1>
+        <div class="meta" id="alta-meta">Cargando...</div>
+      </div>
+    </div>
+    <div class="altas-list" id="altas-list"></div>
+  </div>
+
+  <!-- CULTIVOS -->
+  <div id="view-cultivos" class="view-pane">
+    <div class="page-header">
+      <div>
+        <h1>Cultivos en curso</h1>
+        <div class="meta" id="cult-meta">Cargando...</div>
+      </div>
+    </div>
+    <div class="cultivos-list" id="cultivos-list"></div>
+  </div>
+</main>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<!-- LOADING -->
+<div id="loading" class="loading-overlay" style="display:none">
+  <div class="spinner"></div>
+  <span>Guardando...</span>
+</div>
+
+<!-- MODAL EDICIÓN/CREACIÓN -->
+<div id="modal-edit" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeEditModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Nueva interconsulta</h2>
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Datos básicos -->
+      <div class="modal-section">
+        <h3>Datos del paciente</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre y apellido *</label>
+            <input type="text" id="f-nombre" placeholder="Ej: García, María Fernanda">
+          </div>
+          <div class="form-group">
+            <label>DNI *</label>
+            <input type="text" id="f-dni" placeholder="12345678">
+          </div>
+          <div class="form-group">
+            <label>Sala *</label>
+            <select id="f-sala">
+              <option value="">-- Seleccionar sala --</option>
+            </select>
+          </div>
+          <div class="form-group alta-check" style="justify-content:flex-end;padding-top:18px">
+            <input type="checkbox" id="f-alta">
+            <label for="f-alta">Alta de seguimiento</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagnósticos -->
+      <div class="modal-section">
+        <h3>Diagnóstico/s</h3>
+        <div class="form-grid one">
+          <div class="form-group">
+            <textarea id="f-diagnostico" placeholder="Listá los diagnósticos separados por coma o en líneas separadas..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Antibióticos -->
+      <div class="modal-section">
+        <h3>Antibiótico/s</h3>
+        <div class="abx-list" id="abx-list"></div>
+        <button class="btn-abx-add" onclick="addAbxRow()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Agregar antibiótico
+        </button>
+      </div>
+
+      <!-- Antecedentes -->
+      <div class="modal-section">
+        <h3>Antecedentes y motivo de interconsulta</h3>
+        <div class="form-grid one">
+          <div class="form-group">
+            <textarea id="f-antecedentes" placeholder="Antecedentes relevantes y motivo de la interconsulta..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Evolución -->
+      <div class="modal-section">
+        <h3>Evolución diaria</h3>
+        <div class="evol-list" id="evol-list"></div>
+        <button class="btn-abx-add" onclick="addEvolRow()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Agregar entrada
+        </button>
+      </div>
+
+      <!-- Estudios -->
+      <div class="modal-section">
+        <h3>Exámenes complementarios</h3>
+        <div class="form-grid one">
+          <div class="form-group">
+            <textarea id="f-examenes" placeholder="Laboratorio, imágenes, etc..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Estudios microbiológicos</h3>
+        <div class="form-grid one">
+          <div class="form-group">
+            <textarea id="f-micro" placeholder="Hemocultivos, urocultivo, cultivo de herida, etc..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Serologías</h3>
+        <div class="form-grid one">
+          <div class="form-group">
+            <textarea id="f-serologias" placeholder="VIH, Hepatitis B/C, VDRL, Chagas, etc..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+      <button class="btn-save" onclick="savePatient()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div id="modal-detail" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeDetailModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="detail-title">Detalle del paciente</h2>
+      <button class="modal-close" onclick="closeDetailModal()">✕</button>
+    </div>
+    <div class="modal-body" id="detail-body"></div>
+    <div class="modal-footer" id="detail-footer">
+      <button class="btn-cancel" onclick="closeDetailModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// CONFIGURACIÓN
+// ═══════════════════════════════════════════
+const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
+const BIN_ID = '6a1044fc6610dd3ae88931c6';
+const API_KEY = '$2a$10$6c0dZOH07xqt.KdlmrNBgeR5v89c1ip3gDlbbBIZTQwXgxDgp7J/u';
+
+const SALAS = [
+  'NEUROTÓXICO','SALA 3','SALA 2','UTI','TRAUMA MUJERES',
+  'TRAUMA HOMBRES','SALA 5/UPROT','SALA 6','SALA 7',
+  'PLÁSTICA','SALA 8/UCO','GINECOLOGÍA Y MATERNIDAD','SALA POLICIAL'
+];
+
+// ═══════════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════════
+let patients = [];
+let editMode = false;
+let editingId = null;
+let currentView = 'pase';
+let searchQuery = '';
+
+// ═══════════════════════════════════════════
+// JSONBIN API
+// ═══════════════════════════════════════════
+async function loadData() {
+  // Si no hay configuración, usar datos demo
+  if (!BIN_ID || !API_KEY) {
+    patients = DEMO_DATA;
+    renderAll();
+    return;
+  }
+  try {
+    const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': API_KEY }
+    });
+    if (!r.ok) throw new Error('Error ' + r.status);
+    const j = await r.json();
+    patients = j.record.patients || [];
+    renderAll();
+  } catch(e) {
+    showToast('Error al cargar datos. Usando modo offline.', 'error');
+    patients = DEMO_DATA;
+    renderAll();
+  }
+}
+
+async function saveData() {
+  if (!BIN_ID || !API_KEY) {
+    showToast('Guardado localmente (modo demo)', 'success');
+    return;
+  }
+  const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': API_KEY
+    },
+    body: JSON.stringify({ patients })
+  });
+  if (!r.ok) throw new Error('Error al guardar: ' + r.status);
+}
+
+// ═══════════════════════════════════════════
+// NAVEGACIÓN
+// ═══════════════════════════════════════════
+function showView(v) {
+  currentView = v;
+  document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach((t, i) => {
+    const views = ['pase','pacientes','altas','cultivos'];
+    t.classList.toggle('active', views[i % 4] === v);
+  });
+  renderAll();
+}
+
+function toggleMobile() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+function toggleMode() {
+  editMode = !editMode;
+  const ml = document.getElementById('mode-label');
+  const mlm = document.getElementById('mode-label-mobile');
+  const btn = document.getElementById('btn-mode');
+  const bNew = document.getElementById('btn-new');
+  const bNewM = document.getElementById('btn-new-mobile');
+  const thA = document.getElementById('th-actions');
+
+  if (editMode) {
+    ml.textContent = 'Modo Edición';
+    if(mlm) mlm.textContent = 'Modo Edición';
+    btn.classList.add('edit-active');
+    bNew.style.display = 'flex';
+    if(bNewM) bNewM.style.display = 'flex';
+    thA.style.display = '';
+  } else {
+    ml.textContent = 'Modo Vista';
+    if(mlm) mlm.textContent = 'Modo Vista';
+    btn.classList.remove('edit-active');
+    bNew.style.display = 'none';
+    if(bNewM) bNewM.style.display = 'none';
+    thA.style.display = 'none';
+  }
+  renderAll();
+}
+
+function onSearch(q) {
+  searchQuery = q.toLowerCase().trim();
+  renderAll();
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function renderAll() {
+  renderPase();
+  renderPacientes();
+  renderAltas();
+  renderCultivos();
+}
+
+function filtered() {
+  if (!searchQuery) return patients;
+  return patients.filter(p =>
+    p.nombre.toLowerCase().includes(searchQuery) ||
+    p.dni.includes(searchQuery) ||
+    (p.diagnostico || '').toLowerCase().includes(searchQuery)
+  );
+}
+
+function hl(str) {
+  if (!searchQuery || !str) return str || '';
+  const re = new RegExp('(' + searchQuery.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  return str.replace(re, '<mark>$1</mark>');
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function renderPase() {
+  const grid = document.getElementById('pase-grid');
+  const all = filtered();
+  const activos = all.filter(p => !p.alta);
+  document.getElementById('pase-meta').textContent =
+    `${activos.length} paciente${activos.length !== 1 ? 's' : ''} internado${activos.length !== 1 ? 's' : ''} · ${new Date().toLocaleDateString('es-AR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}`;
+
+  grid.innerHTML = SALAS.map(sala => {
+    const sp = activos.filter(p => p.sala === sala);
+    return `<div class="sala-card">
+      <div class="sala-header">
+        <span class="sala-name">${sala}</span>
+        <span class="sala-count">${sp.length}</span>
+      </div>
+      <div class="sala-patients">
+        ${sp.length === 0
+          ? '<div class="sala-empty">Sin pacientes</div>'
+          : sp.map(p => `
+          <div class="patient-row" onclick="openDetail('${p.id}')">
+            <div class="patient-name">
+              ${hl(p.nombre)}
+              ${p.alta ? '<span class="badge badge-alta">Alta</span>' : ''}
+            </div>
+            <div class="patient-dni">DNI ${hl(p.dni)}</div>
+            <div class="patient-diag">${hl(p.diagnostico || '—')}</div>
+            <div class="patient-abx">
+              ${(p.antibioticos || []).map(a =>
+                `<span class="badge badge-blue">${a.nombre}</span>`
+              ).join('')}
+            </div>
+          </div>`).join('')
+        }
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPacientes() {
+  const tbody = document.getElementById('pac-tbody');
+  const all = filtered().filter(p => !p.alta);
+  document.getElementById('pac-meta').textContent = `${all.length} paciente${all.length !== 1 ? 's' : ''}`;
+
+  if (!all.length) {
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:#94a3b8">Sin pacientes activos</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = all.map(p => {
+    const lastEvol = (p.evoluciones || []).slice(-1)[0];
+    return `<tr onclick="openDetail('${p.id}')" style="cursor:pointer">
+      <td class="td-name">${hl(p.nombre)}</td>
+      <td class="td-mono">${hl(p.dni)}</td>
+      <td><span class="badge badge-gray">${p.sala || '—'}</span></td>
+      <td class="td-long">${hl(p.diagnostico || '—')}</td>
+      <td class="td-long">${(p.antibioticos||[]).map(a =>
+        `<div style="margin-bottom:3px"><span class="badge badge-blue">${a.nombre}</span>
+        <span style="font-size:11px;color:#64748b;font-family:var(--mono);margin-left:4px">${fmtDate(a.inicio)} → ${fmtDate(a.fin)||'?'}</span></div>`
+      ).join('') || '—'}</td>
+      <td class="td-long">${hl(p.antecedentes || '—')}</td>
+      <td class="td-long">${lastEvol ? `<div style="font-size:11px;color:#64748b;font-family:var(--mono);margin-bottom:2px">${fmtDate(lastEvol.fecha)}</div>${hl(lastEvol.texto || '')}` : '—'}</td>
+      <td class="td-long">${hl(p.examenes || '—')}</td>
+      <td class="td-long">${hl(p.microbiologia || '—')}</td>
+      <td class="td-long">${hl(p.serologias || '—')}</td>
+      ${editMode ? `<td class="td-actions" onclick="event.stopPropagation()">
+        <button class="btn-icon" onclick="openEditModal('${p.id}')">✏️ Editar</button>
+        <button class="btn-icon danger" onclick="deletePatient('${p.id}')">🗑 Eliminar</button>
+      </td>` : ''}
+    </tr>`;
+  }).join('');
+}
+
+function renderAltas() {
+  const list = document.getElementById('altas-list');
+  const all = filtered().filter(p => p.alta);
+  document.getElementById('alta-meta').textContent = `${all.length} paciente${all.length !== 1 ? 's' : ''} con alta de seguimiento`;
+
+  if (!all.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>Sin altas de seguimiento registradas</p></div>`;
+    return;
+  }
+
+  list.innerHTML = all.map(p => `
+    <div class="alta-card" onclick="openDetail('${p.id}')" style="cursor:pointer">
+      <div class="alta-info">
+        <div class="name">${hl(p.nombre)}</div>
+        <div class="details">
+          DNI ${hl(p.dni)} &nbsp;·&nbsp; ${p.sala || '—'} &nbsp;·&nbsp;
+          <span style="color:#374151">${hl(p.diagnostico || '—')}</span>
+        </div>
+        <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">
+          ${(p.antibioticos||[]).map(a => `<span class="badge badge-blue">${a.nombre}</span>`).join('')}
+        </div>
+      </div>
+      ${editMode ? `<div onclick="event.stopPropagation()">
+        <button class="btn-icon" onclick="openEditModal('${p.id}')">✏️</button>
+        <button class="btn-icon danger" onclick="deletePatient('${p.id}')">🗑</button>
+      </div>` : ''}
+    </div>`
+  ).join('');
+}
+
+function renderCultivos() {
+  const list = document.getElementById('cultivos-list');
+  // Mostrar pacientes que tienen algo en microbiología
+  const all = filtered().filter(p => p.microbiologia && p.microbiologia.trim());
+  document.getElementById('cult-meta').textContent = `${all.length} paciente${all.length !== 1 ? 's' : ''} con cultivos`;
+
+  if (!all.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🧫</div><p>Sin cultivos registrados</p></div>`;
+    return;
+  }
+
+  list.innerHTML = all.map(p => {
+    const micro = (p.microbiologia || '').toLowerCase();
+    let cls = '', estado = 'En curso';
+    if (micro.includes('negativo') || micro.includes('sin desarrollo')) { cls = 'negativo'; estado = 'Negativo'; }
+    else if (micro.includes('positivo') || micro.includes('aislamiento') || micro.includes('desarrollo')) { cls = 'positivo'; estado = 'Positivo'; }
+
+    return `<div class="cultivo-card ${cls}" onclick="openDetail('${p.id}')" style="cursor:pointer">
+      <div class="cultivo-top">
+        <div class="cultivo-patient">${hl(p.nombre)}</div>
+        <span class="badge ${cls === 'negativo' ? 'badge-green' : cls === 'positivo' ? 'badge-red' : 'badge-yellow'}">${estado}</span>
+      </div>
+      <div class="cultivo-meta">DNI ${p.dni} &nbsp;·&nbsp; ${p.sala || '—'} &nbsp;·&nbsp; ${p.diagnostico || '—'}</div>
+      <div class="cultivo-detail">${hl(p.microbiologia)}</div>
+      ${editMode ? `<div style="margin-top:8px" onclick="event.stopPropagation()">
+        <button class="btn-icon" onclick="openEditModal('${p.id}')">✏️ Editar</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+// MODAL DETALLE
+// ═══════════════════════════════════════════
+function openDetail(id) {
+  const p = patients.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('detail-title').textContent = p.nombre;
+  const body = document.getElementById('detail-body');
+  body.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div><span style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px">DNI</span>
+        <div style="font-family:var(--mono);font-size:14px;margin-top:2px">${p.dni}</div></div>
+      <div><span style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px">Sala</span>
+        <div style="margin-top:2px"><span class="badge badge-gray">${p.sala||'—'}</span>
+        ${p.alta ? '<span class="badge badge-alta" style="margin-left:6px">Alta de seguimiento</span>' : ''}</div></div>
+    </div>
+    ${section('Diagnóstico/s', `<div class="detail-content">${p.diagnostico||'—'}</div>`)}
+    ${(p.antibioticos||[]).length ? section('Antibiótico/s', `
+      <table class="abx-table">
+        <thead><tr><th>Antibiótico</th><th>Inicio</th><th>Fin</th></tr></thead>
+        <tbody>${(p.antibioticos||[]).map(a => `
+          <tr><td style="font-weight:500">${a.nombre}</td><td>${fmtDate(a.inicio)}</td><td>${fmtDate(a.fin)||'—'}</td></tr>`).join('')}
+        </tbody>
+      </table>`) : ''}
+    ${section('Antecedentes y motivo de interconsulta', `<div class="detail-content">${p.antecedentes||'—'}</div>`)}
+    ${(p.evoluciones||[]).length ? section('Evolución diaria', (p.evoluciones||[]).slice().reverse().map(e => `
+      <div class="evol-entry">
+        <div class="evol-date">${fmtDate(e.fecha)}</div>
+        <div class="evol-text">${e.texto||''}</div>
+      </div>`).join('')) : section('Evolución diaria', '<div class="detail-content">—</div>')}
+    ${section('Exámenes complementarios', `<div class="detail-content">${p.examenes||'—'}</div>`)}
+    ${section('Estudios microbiológicos', `<div class="detail-content">${p.microbiologia||'—'}</div>`)}
+    ${section('Serologías', `<div class="detail-content">${p.serologias||'—'}</div>`)}
+  `;
+
+  const footer = document.getElementById('detail-footer');
+  footer.innerHTML = editMode
+    ? `<button class="btn-cancel" onclick="closeDetailModal()">Cerrar</button>
+       <button class="btn-icon danger" onclick="closeDetailModal();deletePatient('${p.id}')" style="padding:8px 16px;font-size:13px">🗑 Eliminar</button>
+       <button class="btn-save" onclick="closeDetailModal();openEditModal('${p.id}')">✏️ Editar</button>`
+    : `<button class="btn-cancel" onclick="closeDetailModal()">Cerrar</button>`;
+
+  document.getElementById('modal-detail').style.display = 'flex';
+}
+
+function section(title, content) {
+  return `<div class="detail-section">
+    <h3>${title}</h3>
+    ${content}
+  </div>`;
+}
+
+function closeDetailModal() {
+  document.getElementById('modal-detail').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════
+// MODAL EDICIÓN
+// ═══════════════════════════════════════════
+function populateSalas() {
+  const sel = document.getElementById('f-sala');
+  sel.innerHTML = '<option value="">-- Seleccionar sala --</option>' +
+    SALAS.map(s => `<option value="${s}">${s}</option>`).join('');
+}
+
+function openNewModal() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Nueva interconsulta';
+  clearForm();
+  document.getElementById('modal-edit').style.display = 'flex';
+}
+
+function openEditModal(id) {
+  editingId = id;
+  const p = patients.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('modal-title').textContent = 'Editar: ' + p.nombre;
+  clearForm();
+  document.getElementById('f-nombre').value = p.nombre || '';
+  document.getElementById('f-dni').value = p.dni || '';
+  document.getElementById('f-sala').value = p.sala || '';
+  document.getElementById('f-alta').checked = !!p.alta;
+  document.getElementById('f-diagnostico').value = p.diagnostico || '';
+  document.getElementById('f-antecedentes').value = p.antecedentes || '';
+  document.getElementById('f-examenes').value = p.examenes || '';
+  document.getElementById('f-micro').value = p.microbiologia || '';
+  document.getElementById('f-serologias').value = p.serologias || '';
+  (p.antibioticos || []).forEach(a => addAbxRow(a));
+  (p.evoluciones || []).forEach(e => addEvolRow(e));
+  document.getElementById('modal-edit').style.display = 'flex';
+}
+
+function clearForm() {
+  ['f-nombre','f-dni','f-diagnostico','f-antecedentes','f-examenes','f-micro','f-serologias'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f-sala').value = '';
+  document.getElementById('f-alta').checked = false;
+  document.getElementById('abx-list').innerHTML = '';
+  document.getElementById('evol-list').innerHTML = '';
+}
+
+function closeEditModal() {
+  document.getElementById('modal-edit').style.display = 'none';
+}
+
+function addAbxRow(data = {}) {
+  const list = document.getElementById('abx-list');
+  const row = document.createElement('div');
+  row.className = 'abx-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Antibiótico" value="${data.nombre||''}">
+    <input type="date" value="${data.inicio||''}">
+    <input type="date" value="${data.fin||''}">
+    <button class="btn-abx-remove" onclick="this.parentElement.remove()">✕</button>
+  `;
+  list.appendChild(row);
+}
+
+function addEvolRow(data = {}) {
+  const list = document.getElementById('evol-list');
+  const row = document.createElement('div');
+  row.className = 'evol-row';
+  row.innerHTML = `
+    <input type="date" value="${data.fecha||new Date().toISOString().slice(0,10)}">
+    <textarea placeholder="Evolución del día...">${data.texto||''}</textarea>
+    <button class="btn-abx-remove" onclick="this.parentElement.remove()">✕</button>
+  `;
+  list.appendChild(row);
+}
+
+async function savePatient() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const dni = document.getElementById('f-dni').value.trim();
+  const sala = document.getElementById('f-sala').value;
+  if (!nombre || !dni || !sala) {
+    showToast('Completá nombre, DNI y sala', 'error');
+    return;
+  }
+
+  const antibioticos = Array.from(document.querySelectorAll('.abx-row')).map(row => {
+    const ins = row.querySelectorAll('input');
+    return { nombre: ins[0].value.trim(), inicio: ins[1].value, fin: ins[2].value };
+  }).filter(a => a.nombre);
+
+  const evoluciones = Array.from(document.querySelectorAll('.evol-row')).map(row => {
+    return {
+      fecha: row.querySelector('input[type=date]').value,
+      texto: row.querySelector('textarea').value.trim()
+    };
+  }).filter(e => e.texto);
+
+  const data = {
+    nombre,
+    dni,
+    sala,
+    alta: document.getElementById('f-alta').checked,
+    diagnostico: document.getElementById('f-diagnostico').value.trim(),
+    antibioticos,
+    antecedentes: document.getElementById('f-antecedentes').value.trim(),
+    evoluciones,
+    examenes: document.getElementById('f-examenes').value.trim(),
+    microbiologia: document.getElementById('f-micro').value.trim(),
+    serologias: document.getElementById('f-serologias').value.trim(),
+  };
+
+  if (editingId) {
+    const idx = patients.findIndex(x => x.id === editingId);
+    patients[idx] = { ...patients[idx], ...data };
+  } else {
+    data.id = 'p_' + Date.now();
+    data.createdAt = new Date().toISOString();
+    patients.push(data);
+  }
+
+  document.getElementById('loading').style.display = 'flex';
+  try {
+    await saveData();
+    closeEditModal();
+    renderAll();
+    showToast('Guardado correctamente', 'success');
+  } catch(e) {
+    showToast('Error al guardar: ' + e.message, 'error');
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+  }
+}
+
+async function deletePatient(id) {
+  if (!confirm('¿Eliminar este paciente? Esta acción no se puede deshacer.')) return;
+  patients = patients.filter(p => p.id !== id);
+  document.getElementById('loading').style.display = 'flex';
+  try {
+    await saveData();
+    renderAll();
+    showToast('Paciente eliminado', 'success');
+  } catch(e) {
+    showToast('Error al eliminar: ' + e.message, 'error');
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+  }
+}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+let toastTimer;
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.add('hidden'), 3000);
+}
+
+// ═══════════════════════════════════════════
+// CONFIGURACIÓN JSONBIN
+// ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+// DATOS DEMO
+// ═══════════════════════════════════════════
+const DEMO_DATA = [
+  {
+    id:'demo1', nombre:'García Pérez, María Fernanda', dni:'28456789', sala:'SALA 3',
+    diagnostico:'Neumonía adquirida en la comunidad · SIRS',
+    antibioticos:[
+      {nombre:'Ampicilina-sulbactam',inicio:'2025-07-01',fin:'2025-07-10'},
+      {nombre:'Claritromicina',inicio:'2025-07-01',fin:'2025-07-07'}
+    ],
+    antecedentes:'HTA, DBT2. Consulta por fiebre de 5 días, tos productiva y disnea.',
+    evoluciones:[
+      {fecha:'2025-07-01',texto:'Ingresa afebril post-antitérmico. Rales crepitantes en base derecha. Sato2 94%.'},
+      {fecha:'2025-07-02',texto:'Persiste febril 38.5°C. Rx tórax con condensación basal derecha confirmada.'},
+      {fecha:'2025-07-03',texto:'Mejora clínica, afebril. Sato2 97% con AA.'}
+    ],
+    examenes:'Rx tórax: condensación basal derecha. Lab: GB 14.000, PCR 120, creatinina 0.9.',
+    microbiologia:'Hemocultivos x2 (01/07): en espera de resultado. Antigenuria neumococo: negativa.',
+    serologias:'VIH neg (2024). Hepatitis B: HBsAg negativo.',
+    alta: false
+  },
+  {
+    id:'demo2', nombre:'Rodríguez, Juan Carlos', dni:'18234567', sala:'UTI',
+    diagnostico:'Sepsis de foco urinario · IVU complicada por Klebsiella sp.',
+    antibioticos:[
+      {nombre:'Meropenem 1g c/8hs IV',inicio:'2025-06-28',fin:'2025-07-07'}
+    ],
+    antecedentes:'Litiasis renal. Diabético insulinodependiente. Orina turbia y fiebre de 3 días.',
+    evoluciones:[
+      {fecha:'2025-06-28',texto:'Ingresa a UTI con parámetros sépticos. Urocultivo en curso.'},
+      {fecha:'2025-06-30',texto:'Urocultivo positivo: Klebsiella pneumoniae BLEE+. Se ajusta ATB a meropenem.'},
+      {fecha:'2025-07-02',texto:'Mejora hemodinámica. En plan de descalada próximas 48hs.'}
+    ],
+    examenes:'Ecografía renal: leve ectasia piélica bilateral. Lab: GB 18.000, Cr 1.8 (basal 1.0).',
+    microbiologia:'Urocultivo 28/06: Klebsiella pneumoniae BLEE+, sensible a carbapenemes. Hemocultivos: sin desarrollo.',
+    serologias:'VIH neg.',
+    alta: false
+  },
+  {
+    id:'demo3', nombre:'López Martínez, Ana Sofía', dni:'35123456', sala:'SALA 2',
+    diagnostico:'Celulitis miembro inferior izquierdo',
+    antibioticos:[
+      {nombre:'Cefalexina 500mg c/6hs VO',inicio:'2025-07-02',fin:'2025-07-12'}
+    ],
+    antecedentes:'Sin antecedentes relevantes. Lesión traumática 5 días previos con progresión de eritema.',
+    evoluciones:[
+      {fecha:'2025-07-02',texto:'Eritema delimitado cara anterior de pierna izquierda. Sin fluctuación. Afebril.'},
+      {fecha:'2025-07-03',texto:'Leve mejoría, marcado eritema estacionario.'}
+    ],
+    examenes:'Lab: GB 11.200, PCR 45. Ecodoppler: sin TVP.',
+    microbiologia:'No se realizaron cultivos inicialmente.',
+    serologias:'No aplica.',
+    alta: false
+  },
+  {
+    id:'demo4', nombre:'Peralta, Roberto Darío', dni:'22876543', sala:'TRAUMA HOMBRES',
+    diagnostico:'Osteomielitis postraumática húmero izquierdo · Herida infectada',
+    antibioticos:[
+      {nombre:'Vancomicina 1g c/12hs IV',inicio:'2025-06-20',fin:'2025-07-05'},
+      {nombre:'Rifampicina 600mg/día VO',inicio:'2025-06-25',fin:'2025-07-20'}
+    ],
+    antecedentes:'Fractura expuesta de húmero hace 3 semanas. Fiebre y secreción purulenta en herida quirúrgica.',
+    evoluciones:[
+      {fecha:'2025-07-01',texto:'Secreción menor, herida con mejoría parcial. Vancocinemia 18 mg/L.'},
+      {fecha:'2025-07-03',texto:'Plan de completar ciclo y pasar a VO según cultivos.'}
+    ],
+    examenes:'RMN húmero: señal compatible con osteomielitis. Lab: PCR 68, VSG 85.',
+    microbiologia:'Cultivo de herida (20/06): Staphylococcus aureus SAMR, sensible a vancomicina y rifampicina.',
+    serologias:'VIH neg. VDRL neg.',
+    alta: false
+  },
+  {
+    id:'demo5', nombre:'Fernández, Claudia Beatriz', dni:'14789456', sala:'GINECOLOGÍA Y MATERNIDAD',
+    diagnostico:'Endometritis postparto · Fiebre puerperal',
+    antibioticos:[
+      {nombre:'Clindamicina 900mg c/8hs IV',inicio:'2025-07-01',fin:'2025-07-07'},
+      {nombre:'Gentamicina 240mg/día IV',inicio:'2025-07-01',fin:'2025-07-07'}
+    ],
+    antecedentes:'Parto vaginal instrumental hace 72hs. Fiebre 39°C y dolor pélvico.',
+    evoluciones:[
+      {fecha:'2025-07-01',texto:'Loquios malolientes. Útero subinvolucionado y sensible. Ecografía con resto placentario pequeño.'},
+      {fecha:'2025-07-02',texto:'Afebril a las 24hs de ATB. Evolución favorable.'}
+    ],
+    examenes:'Lab: GB 16.000, PCR 95. Eco pélvica: mínimo resto subcentimétrico.',
+    microbiologia:'Hemocultivos x2: en proceso.',
+    serologias:'VIH neg. Hepatitis B: vacunada.',
+    alta: false
+  },
+  {
+    id:'demo6', nombre:'Suárez, Héctor Gustavo', dni:'20345678', sala:'SALA 6',
+    diagnostico:'Meningitis bacteriana (neumocócica)',
+    antibioticos:[
+      {nombre:'Ceftriaxona 2g c/12hs IV',inicio:'2025-06-26',fin:'2025-07-10'},
+      {nombre:'Dexametasona 8mg c/6hs IV',inicio:'2025-06-26',fin:'2025-06-30'}
+    ],
+    antecedentes:'Alcohlismo crónico. Consulta por cefalea intensa, fiebre y rigidez de nuca de 24hs de evolución.',
+    evoluciones:[
+      {fecha:'2025-06-26',texto:'LCR turbio, glucosa 20, proteínas 380, GB 2400 (PMN 90%). DPC: neumococo.'},
+      {fecha:'2025-07-01',texto:'Paciente hemodinámicamente estable. Sin focalidad neurológica nueva.'},
+      {fecha:'2025-07-03',texto:'Alerta, orientado. Completando 14 días de ceftriaxona.'}
+    ],
+    examenes:'TC cerebro: s/lesiones ocupantes. PL: presión de apertura 28cmH2O.',
+    microbiologia:'LCR cultivo: Streptococcus pneumoniae, sensible a penicilina. Hemocultivos: S. pneumoniae.',
+    serologias:'VIH neg. Sin serologías adicionales por el momento.',
+    alta: false
+  },
+  {
+    id:'demo7', nombre:'Gómez, Patricia Elena', dni:'30456123', sala:'SALA 3',
+    diagnostico:'Infección de vía biliar · Colangitis aguda moderada',
+    antibioticos:[
+      {nombre:'Piperacilina-tazobactam 4,5g c/8hs IV',inicio:'2025-07-03',fin:'2025-07-10'}
+    ],
+    antecedentes:'Litiasis coledociana. Post-ERCP hace 48hs. Fiebre, ictericia y dolor en HCD (tríada de Charcot).',
+    evoluciones:[
+      {fecha:'2025-07-03',texto:'Colangitis grado 2. Se inicia ATB empírica. Cultivo de bilis peri-ERCP enviado.'}
+    ],
+    examenes:'BT 4.2 mg/dl. Fosfatasa alcalina 380 U/L. Eco abdominal: dilatación de vía biliar.',
+    microbiologia:'Bilis ERCP: pendiente resultado. Hemocultivos x2: enviados.',
+    serologias:'VIH neg.',
+    alta: false
+  },
+  {
+    id:'demo8', nombre:'Torres Ríos, Miguel Ángel', dni:'25678901', sala:'SALA 5/UPROT',
+    diagnostico:'Neutropenia febril por quimioterapia · Posible IFI',
+    antibioticos:[
+      {nombre:'Cefepime 2g c/8hs IV',inicio:'2025-07-02',fin:''},
+      {nombre:'Voriconazol 200mg c/12hs IV',inicio:'2025-07-03',fin:''}
+    ],
+    antecedentes:'LMA en tratamiento con quimioterapia. Neutrófilos 120/mm3. Fiebre sin foco aparente.',
+    evoluciones:[
+      {fecha:'2025-07-02',texto:'Ingresa febril 39.2°C. Sin foco clínico. Hemocultivos x2 enviados.'},
+      {fecha:'2025-07-03',texto:'TAC tórax con imagen en halo en LSD. Se agrega voriconazol empírico. Galactomanano enviado.'}
+    ],
+    examenes:'TC tórax: imagen nodular con halo en LSD 1.5cm. Lab: Neutrófilos 120, PCR 180.',
+    microbiologia:'Hemocultivos x2: en proceso. Galactomanano en suero: pendiente. BAL: programado.',
+    serologias:'No aplica en contexto actual.',
+    alta: false
+  },
+  {
+    id:'demo9', nombre:'Díaz, Noemí Graciela', dni:'12890234', sala:'SALA 2',
+    diagnostico:'IVU baja no complicada',
+    antibioticos:[
+      {nombre:'Nitrofurantoína 100mg c/8hs VO',inicio:'2025-07-01',fin:'2025-07-06'}
+    ],
+    antecedentes:'Sin antecedentes. Disuria, polaquiuria, sin fiebre.',
+    evoluciones:[
+      {fecha:'2025-07-01',texto:'Síntomas leves. Urocultivo enviado. Se inicia tratamiento empírico.'},
+      {fecha:'2025-07-02',texto:'Mejoría clínica, continúa antibiótico. Alta de seguimiento planificada.'}
+    ],
+    examenes:'Sedimento urinario: piuria, bacteriuria. Lab: sin alteraciones.',
+    microbiologia:'Urocultivo 01/07: pendiente.',
+    serologias:'—',
+    alta: true
+  }
+];
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+populateSalas();
+loadData();
+
+// Atajo teclado ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeDetailModal();
+    closeEditModal();
+  }
+});
+</script>
+</body>
+</html>
