@@ -502,6 +502,80 @@ td.td-actions { white-space: nowrap; }
   .cultivo-entry-row .ce-full { grid-column: 1; }
 }
 
+
+/* ── HUÉSPED INMUNOCOMPROMETIDO ── */
+.inmuno-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.inmuno-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 12px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg);
+  transition: all .15s;
+  user-select: none;
+}
+.inmuno-chip:hover { border-color: var(--accent); color: var(--accent); }
+.inmuno-chip.selected {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+.inmuno-chip input[type=checkbox] { display: none; }
+
+/* ── PENDIENTES ── */
+.pendientes-list { display: flex; flex-direction: column; gap: 6px; }
+.pendiente-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.pendiente-row input[type=text] {
+  background: white;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  outline: none;
+  width: 100%;
+}
+.pendiente-row input:focus { border-color: var(--accent); }
+.badge-pendiente {
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ── FECHAS FILA ── */
+.dates-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 600px) {
+  .dates-row { grid-template-columns: 1fr; }
+  .inmuno-options { gap: 6px; }
+}
+
 /* ── CULTIVOS VIEW ── */
 .cultivos-list {
   display: flex;
@@ -530,16 +604,17 @@ td.td-actions { white-space: nowrap; }
   background: rgba(0,0,0,.5);
   z-index: 500;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 20px 16px 60px;
+  overscroll-behavior: contain;
 }
 .modal {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 760px;
   box-shadow: 0 20px 40px rgba(0,0,0,.2);
-  margin: 0 auto;
+  margin: 20px auto 60px;
   position: relative;
 }
 .modal-header {
@@ -839,8 +914,7 @@ mark { background: #fef9c3; border-radius: 2px; padding: 0 2px; }
 }
 
 @media (max-width: 480px) {
-  .modal-overlay { padding: 8px 8px 60px; }
-  .modal { border-radius: 12px; }
+  .modal { width: calc(100% - 16px); margin: 10px auto 60px; }
   .modal-body { padding: 14px; }
 }
 
@@ -1171,10 +1245,47 @@ mark { background: #fef9c3; border-radius: 2px; padding: 0 2px; }
               <option value="">-- Seleccionar sala --</option>
             </select>
           </div>
-          <div class="form-group alta-check" style="justify-content:flex-end;padding-top:18px">
+          <div class="form-group alta-check" style="padding-top:18px">
             <input type="checkbox" id="f-alta">
             <label for="f-alta">Alta de seguimiento</label>
           </div>
+        </div>
+        <div class="dates-row" style="margin-top:12px">
+          <div class="form-group">
+            <label>Fecha de ingreso</label>
+            <input type="date" id="f-fecha-ingreso">
+          </div>
+          <div class="form-group">
+            <label>Fecha de interconsulta</label>
+            <input type="date" id="f-fecha-interconsulta">
+          </div>
+          <div class="form-group">
+            <label>Fecha de alta de seguimiento</label>
+            <input type="date" id="f-fecha-alta">
+          </div>
+        </div>
+      </div>
+
+      <!-- Huésped inmunocomprometido -->
+      <div class="modal-section">
+        <h3>Huésped inmunocomprometido</h3>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <input type="checkbox" id="f-inmuno" style="width:16px;height:16px;cursor:pointer" onchange="toggleInmuno()">
+          <label for="f-inmuno" style="font-size:13px;font-weight:500;cursor:pointer;color:var(--text)">Sí, este paciente es inmunocomprometido</label>
+        </div>
+        <div class="inmuno-options" id="inmuno-options" style="display:none">
+          <label class="inmuno-chip" onclick="toggleChip(this)">
+            <input type="checkbox" value="HIV">🔴 HIV
+          </label>
+          <label class="inmuno-chip" onclick="toggleChip(this)">
+            <input type="checkbox" value="TOS">🫀 TOS
+          </label>
+          <label class="inmuno-chip" onclick="toggleChip(this)">
+            <input type="checkbox" value="FARMACOLÓGICO">💊 Farmacológico
+          </label>
+          <label class="inmuno-chip" onclick="toggleChip(this)">
+            <input type="checkbox" value="ONCOHEMATOLÓGICO">🩸 Oncohematológico
+          </label>
         </div>
       </div>
 
@@ -1244,6 +1355,16 @@ mark { background: #fef9c3; border-radius: 2px; padding: 0 2px; }
             <textarea id="f-serologias" placeholder="VIH, Hepatitis B/C, VDRL, Chagas, etc..."></textarea>
           </div>
         </div>
+      </div>
+
+      <!-- Pendientes -->
+      <div class="modal-section">
+        <h3>⏳ Pendientes</h3>
+        <div class="pendientes-list" id="pendientes-list"></div>
+        <button class="btn-abx-add" style="margin-top:8px" onclick="addPendienteRow()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Agregar pendiente
+        </button>
       </div>
     </div>
     <div class="modal-footer">
@@ -1421,18 +1542,21 @@ function renderAbxPase(p) {
 
 function renderPendientes(p) {
   const pendientes = [];
-  // cultivos estructurados en curso
-  const cultEnCurso = (p.cultivos || []).filter(c => c.estado === 'en_curso');
-  if (cultEnCurso.length) pendientes.push(`Cultivo${cultEnCurso.length > 1 ? 's' : ''} (${cultEnCurso.length})`);
-  // legacy texto
-  if (!p.cultivos || !p.cultivos.length) {
-    const micro = (p.microbiologia || '').toLowerCase();
-    if (micro.includes('pendiente') || micro.includes('en proceso') || micro.includes('espera')) pendientes.push('Cultivos');
+  // campo estructurado
+  (p.pendientes || []).forEach(t => pendientes.push(t));
+  // cultivos en curso (si no hay campo estructurado de pendientes)
+  if (!p.pendientes || !p.pendientes.length) {
+    const cultEnCurso = (p.cultivos || []).filter(c => c.estado === 'en_curso');
+    if (cultEnCurso.length) pendientes.push(`Cultivo${cultEnCurso.length > 1 ? 's' : ''} (${cultEnCurso.length})`);
+    if (!p.cultivos || !p.cultivos.length) {
+      const micro = (p.microbiologia || '').toLowerCase();
+      if (micro.includes('pendiente') || micro.includes('en proceso') || micro.includes('espera')) pendientes.push('Cultivos');
+    }
+    const ex = (p.examenes || '').toLowerCase();
+    const ser = (p.serologias || '').toLowerCase();
+    if (ex.includes('pendiente') || ex.includes('solicitado')) pendientes.push('Lab/Imágenes');
+    if (ser.includes('pendiente') || ser.includes('solicitado')) pendientes.push('Serologías');
   }
-  const examenes = (p.examenes || '').toLowerCase();
-  const serologias = (p.serologias || '').toLowerCase();
-  if (examenes.includes('pendiente') || examenes.includes('en espera') || examenes.includes('solicitado')) pendientes.push('Lab/Imágenes');
-  if (serologias.includes('pendiente') || serologias.includes('en espera') || serologias.includes('solicitado')) pendientes.push('Serologías');
   if (!pendientes.length) return '';
   return `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:3px">
     <span style="font-size:10px;color:#92400e;font-weight:600;align-self:center">⏳</span>
@@ -1493,6 +1617,7 @@ function renderPase() {
             <div class="patient-name">
               ${hl(p.nombre)}
               ${p.alta ? '<span class="badge badge-alta">Alta</span>' : ''}
+              ${p.inmunocomprometido ? '<span class="badge badge-red" title="' + (p.tiposInmuno||[]).join(', ') + '">🛡 IC</span>' : ''}
             </div>
             <div class="patient-dni">DNI ${hl(p.dni)}</div>
             <div class="patient-diag">${hl(p.diagnostico || '—')}</div>
@@ -1647,14 +1772,29 @@ function openDetail(id) {
   if (!p) return;
   document.getElementById('detail-title').textContent = p.nombre;
   const body = document.getElementById('detail-body');
+  const inmunoHtml = p.inmunocomprometido && (p.tiposInmuno||[]).length
+    ? `<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">${(p.tiposInmuno||[]).map(t =>
+        `<span class="badge badge-red">${t}</span>`).join('')}</div>` : '';
   body.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-      <div><span style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px">DNI</span>
-        <div style="font-family:var(--mono);font-size:14px;margin-top:2px">${p.dni}</div></div>
-      <div><span style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px">Sala</span>
-        <div style="margin-top:2px"><span class="badge badge-gray">${p.sala||'—'}</span>
-        ${p.alta ? '<span class="badge badge-alta" style="margin-left:6px">Alta de seguimiento</span>' : ''}</div></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px">
+      <div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">DNI</div>
+        <div style="font-family:var(--mono);font-size:13px">${p.dni}</div></div>
+      <div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Sala</div>
+        <span class="badge badge-gray">${p.sala||'—'}</span>
+        ${p.alta ? '<span class="badge badge-alta" style="margin-left:4px">Alta</span>' : ''}</div>
+      ${p.fechaIngreso ? `<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Ingreso</div>
+        <div style="font-size:13px">${fmtDate(p.fechaIngreso)}</div></div>` : ''}
+      ${p.fechaInterconsulta ? `<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Interconsulta</div>
+        <div style="font-size:13px">${fmtDate(p.fechaInterconsulta)}</div></div>` : ''}
+      ${p.fechaAlta ? `<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Alta seguimiento</div>
+        <div style="font-size:13px">${fmtDate(p.fechaAlta)}</div></div>` : ''}
     </div>
+    ${p.inmunocomprometido ? `<div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:8px 12px;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:600;color:#991b1b">🛡 Inmunocomprometido</span>${inmunoHtml}</div>` : ''}
+    ${(p.pendientes||[]).length ? `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:8px 12px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:600;color:#92400e;margin-bottom:6px">⏳ PENDIENTES</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">${(p.pendientes||[]).map(t =>
+        `<span class="badge-pendiente">${t}</span>`).join('')}</div></div>` : ''}
     ${section('Diagnóstico/s', `<div class="detail-content">${p.diagnostico||'—'}</div>`)}
     ${(p.antibioticos||[]).length ? section('Antibiótico/s', `
       <table class="abx-table">
@@ -1753,18 +1893,57 @@ function openEditModal(id) {
 }
 
 function clearForm() {
-  ['f-nombre','f-dni','f-diagnostico','f-antecedentes','f-examenes','f-serologias'].forEach(id => {
+  ['f-nombre','f-dni','f-diagnostico','f-antecedentes','f-examenes','f-serologias',
+   'f-fecha-ingreso','f-fecha-interconsulta','f-fecha-alta'].forEach(id => {
     document.getElementById(id).value = '';
   });
   document.getElementById('f-sala').value = '';
   document.getElementById('f-alta').checked = false;
+  document.getElementById('f-inmuno').checked = false;
+  document.getElementById('inmuno-options').style.display = 'none';
+  document.querySelectorAll('.inmuno-chip').forEach(c => {
+    c.classList.remove('selected');
+    c.querySelector('input').checked = false;
+  });
   document.getElementById('abx-list').innerHTML = '';
   document.getElementById('evol-list').innerHTML = '';
   document.getElementById('cultivo-list').innerHTML = '';
+  document.getElementById('pendientes-list').innerHTML = '';
 }
 
 function closeEditModal() {
   document.getElementById('modal-edit').style.display = 'none';
+}
+
+function toggleInmuno() {
+  const cb = document.getElementById('f-inmuno');
+  const opts = document.getElementById('inmuno-options');
+  opts.style.display = cb.checked ? 'flex' : 'none';
+  if (!cb.checked) {
+    document.querySelectorAll('.inmuno-chip').forEach(c => {
+      c.classList.remove('selected');
+      c.querySelector('input').checked = false;
+    });
+  }
+}
+
+function toggleChip(label) {
+  // el click ya toggleó el checkbox internamente
+  setTimeout(() => {
+    const cb = label.querySelector('input');
+    label.classList.toggle('selected', cb.checked);
+  }, 0);
+}
+
+function addPendienteRow(texto = '') {
+  const list = document.getElementById('pendientes-list');
+  const row = document.createElement('div');
+  row.className = 'pendiente-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Ej: Hemocultivo x2, Galactomanano, RMN..." value="${texto}">
+    <button class="btn-abx-remove" onclick="this.parentElement.remove()">✕</button>
+  `;
+  list.appendChild(row);
 }
 
 function addAbxRow(data = {}) {
@@ -1843,11 +2022,21 @@ async function savePatient() {
     };
   }).filter(e => e.texto);
 
+  const inmunoChecked = document.getElementById('f-inmuno').checked;
+  const tiposInmuno = inmunoChecked
+    ? Array.from(document.querySelectorAll('.inmuno-chip.selected input')).map(i => i.value)
+    : [];
+
   const data = {
     nombre,
     dni,
     sala,
     alta: document.getElementById('f-alta').checked,
+    fechaIngreso: document.getElementById('f-fecha-ingreso').value,
+    fechaInterconsulta: document.getElementById('f-fecha-interconsulta').value,
+    fechaAlta: document.getElementById('f-fecha-alta').value,
+    inmunocomprometido: inmunoChecked,
+    tiposInmuno,
     diagnostico: document.getElementById('f-diagnostico').value.trim(),
     antibioticos,
     antecedentes: document.getElementById('f-antecedentes').value.trim(),
@@ -1860,6 +2049,8 @@ async function savePatient() {
       estado: row.querySelector('[name="ce-estado"]').value,
     })).filter(c => c.muestra || c.resultado),
     serologias: document.getElementById('f-serologias').value.trim(),
+    pendientes: Array.from(document.querySelectorAll('.pendiente-row input[type=text]'))
+      .map(i => i.value.trim()).filter(Boolean),
   };
 
   if (editingId) {
