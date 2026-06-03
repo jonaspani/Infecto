@@ -165,13 +165,9 @@ td.td-long{min-width:160px;max-width:220px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{display:inline-block;width:24px;height:24px;border:3px solid rgba(26,39,68,.15);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite}
 
-/* ══════════════════════════════════════
-   MODAL — arquitectura definitiva
-   overlay: fondo oscuro fijo (no scrollea)
-   scroll-wrap: capa scrolleable encima
-   ══════════════════════════════════════ */
+/* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;display:none}
-.modal-scroll-wrap{position:fixed;inset:0;z-index:601;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:20px 16px 80px}
+.modal-scroll-wrap{position:fixed;top:0;left:0;width:100%;height:100%;z-index:601;overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:20px 16px 80px}
 .modal{background:var(--bg-card);border-radius:var(--radius-lg);width:100%;max-width:760px;box-shadow:0 24px 48px rgba(0,0,0,.3);margin:0 auto}
 .modal-header{background:var(--navy);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
 .modal-header h2{color:#fff;font-size:16px;font-weight:600}
@@ -202,7 +198,7 @@ td.td-long{min-width:160px;max-width:220px}
 .inmuno-chip.selected{background:var(--accent-light);border-color:var(--accent);color:var(--accent-dark)}
 .inmuno-chip input{display:none}
 
-/* ── ABX ROWS ── */
+/* ── ABX / EVOL / CULTIVO / PENDIENTE ROWS ── */
 .abx-list,.evol-list,.cultivo-entries,.pendientes-list{display:flex;flex-direction:column;gap:8px;margin-bottom:6px}
 .abx-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 10px}
 .abx-row input{background:#fff;border:1px solid var(--border-strong);border-radius:4px;padding:5px 8px;font-family:var(--font);font-size:12px;outline:none;width:100%}
@@ -210,20 +206,15 @@ td.td-long{min-width:160px;max-width:220px}
 .evol-row{display:grid;grid-template-columns:130px 1fr auto;gap:8px;align-items:start}
 .evol-row input[type=date],.evol-row textarea{background:#fff;border:1px solid var(--border-strong);border-radius:4px;padding:5px 8px;font-family:var(--font);font-size:12px;outline:none;width:100%}
 .evol-row textarea{resize:vertical;min-height:50px}
-
-/* ── CULTIVO ENTRY ── */
 .cultivo-entry-row{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative}
 .cultivo-entry-row .ce-full{grid-column:1/-1}
 .cultivo-entry-row input,.cultivo-entry-row select,.cultivo-entry-row textarea{background:#fff;border:1px solid var(--border-strong);border-radius:5px;padding:5px 8px;font-family:var(--font);font-size:12px;color:var(--text);outline:none;width:100%}
 .cultivo-entry-row input:focus,.cultivo-entry-row select:focus,.cultivo-entry-row textarea:focus{border-color:var(--accent)}
 .cultivo-entry-row textarea{resize:vertical;min-height:44px}
 .cultivo-entry-label{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
-
-/* ── PENDIENTE ROW ── */
 .pendiente-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 10px}
 .pendiente-row input{background:#fff;border:1px solid var(--border-strong);border-radius:4px;padding:5px 8px;font-family:var(--font);font-size:12px;outline:none;width:100%}
 .pendiente-row input:focus{border-color:var(--accent)}
-
 .btn-remove{background:none;border:none;color:var(--danger);cursor:pointer;font-size:16px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;flex-shrink:0}
 .btn-remove:hover{background:var(--danger-light)}
 .btn-add{margin-top:4px;background:none;border:1px dashed var(--border-strong);border-radius:6px;padding:7px 12px;font-family:var(--font);font-size:12px;color:var(--accent);cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .1s}
@@ -233,7 +224,7 @@ td.td-long{min-width:160px;max-width:220px}
 .btn-save{background:var(--navy);border:none;color:#fff;padding:8px 22px;border-radius:6px;font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer}
 .btn-save:hover{background:var(--navy-light)}
 
-/* ── DETAIL MODAL ── */
+/* ── DETAIL ── */
 .detail-section{margin-bottom:16px}
 .detail-section h3{font-size:10.5px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
 .detail-content{font-size:13.5px;color:var(--text);white-space:pre-wrap;line-height:1.6}
@@ -312,7 +303,7 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
         Nueva interconsulta
       </button>
-      <button class="btn-logout" onclick="doLogout()">⎋ Salir</button>
+      <button class="btn-logout" onclick="doLogout()">&#x238B; Salir</button>
     </div>
     <button class="hamburger" onclick="toggleMobile()">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -328,14 +319,13 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
         <input type="text" placeholder="Buscar..." oninput="onSearch(this.value)"></div>
       <button class="btn-mode" onclick="toggleMode()"><span id="mode-label-m">Modo Vista</span></button>
       <button class="btn-new" id="btn-new-m" style="display:none" onclick="openNewModal();toggleMobile()">+ Nueva interconsulta</button>
-      <button class="btn-logout" onclick="doLogout()" style="justify-content:center">⎋ Salir</button>
+      <button class="btn-logout" onclick="doLogout()">&#x238B; Salir</button>
     </div>
   </div>
 </nav>
 
 <!-- MAIN -->
 <main style="display:none">
-  <!-- PASE -->
   <div id="view-pase" class="view-pane active">
     <div class="page-header">
       <div><h1>Pase diario</h1><div class="meta" id="pase-meta"></div></div>
@@ -347,7 +337,6 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
     <div class="pase-grid" id="pase-grid"></div>
   </div>
 
-  <!-- PACIENTES -->
   <div id="view-pacientes" class="view-pane">
     <div class="page-header">
       <div><h1>Interconsultas activas</h1><div class="meta" id="pac-meta"></div></div>
@@ -365,7 +354,6 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
     </div>
   </div>
 
-  <!-- ALTAS -->
   <div id="view-altas" class="view-pane">
     <div class="page-header">
       <div><h1>Altas de seguimiento</h1><div class="meta" id="alta-meta"></div></div>
@@ -377,7 +365,6 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
     <div class="altas-list" id="altas-list"></div>
   </div>
 
-  <!-- CULTIVOS -->
   <div id="view-cultivos" class="view-pane">
     <div class="page-header">
       <div><h1>Cultivos en curso</h1><div class="meta" id="cult-meta"></div></div>
@@ -386,25 +373,18 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
   </div>
 </main>
 
-<!-- TOAST -->
 <div id="toast" class="toast hidden"></div>
+<div id="loading" class="loading-overlay" style="display:none"><div class="spinner"></div><span>Guardando...</span></div>
 
-<!-- LOADING -->
-<div id="loading" class="loading-overlay" style="display:none">
-  <div class="spinner"></div><span>Guardando...</span>
-</div>
-
-<!-- MODAL EDICIÓN: overlay + scroll-wrap separados -->
+<!-- MODALES -->
 <div id="modal-edit-overlay" class="modal-overlay"></div>
 <div id="modal-edit-wrap" class="modal-scroll-wrap" style="display:none" onclick="if(event.target===this)closeEditModal()">
   <div class="modal">
     <div class="modal-header">
       <h2 id="modal-edit-title">Nueva interconsulta</h2>
-      <button class="modal-close" onclick="closeEditModal()">✕</button>
+      <button class="modal-close" onclick="closeEditModal()">&#x2715;</button>
     </div>
     <div class="modal-body">
-
-      <!-- Datos básicos -->
       <div class="modal-section">
         <h3>Datos del paciente</h3>
         <div class="form-grid">
@@ -421,74 +401,52 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
           <div class="form-group"><label>Fecha de alta de seguimiento</label><input type="date" id="f-fecha-alta"></div>
         </div>
       </div>
-
-      <!-- Huésped inmunocomprometido -->
       <div class="modal-section">
         <h3>Huésped inmunocomprometido</h3>
-        <div class="alta-check">
-          <input type="checkbox" id="f-inmuno" onchange="toggleInmuno()">
-          <label for="f-inmuno">Sí, este paciente es inmunocomprometido</label>
-        </div>
+        <div class="alta-check"><input type="checkbox" id="f-inmuno" onchange="toggleInmuno()"><label for="f-inmuno">Sí, este paciente es inmunocomprometido</label></div>
         <div class="inmuno-options" id="inmuno-options" style="display:none">
-          <label class="inmuno-chip"><input type="checkbox" value="HIV" onchange="syncChip(this)">🔴 HIV</label>
-          <label class="inmuno-chip"><input type="checkbox" value="TOS" onchange="syncChip(this)">🫀 TOS</label>
-          <label class="inmuno-chip"><input type="checkbox" value="FARMACOLÓGICO" onchange="syncChip(this)">💊 Farmacológico</label>
-          <label class="inmuno-chip"><input type="checkbox" value="ONCOHEMATOLÓGICO" onchange="syncChip(this)">🩸 Oncohematológico</label>
+          <label class="inmuno-chip"><input type="checkbox" value="HIV" onchange="syncChip(this)">&#x1F534; HIV</label>
+          <label class="inmuno-chip"><input type="checkbox" value="TOS" onchange="syncChip(this)">&#x1FAC0; TOS</label>
+          <label class="inmuno-chip"><input type="checkbox" value="FARMACOLÓGICO" onchange="syncChip(this)">&#x1F48A; Farmacológico</label>
+          <label class="inmuno-chip"><input type="checkbox" value="ONCOHEMATOLÓGICO" onchange="syncChip(this)">&#x1FA78; Oncohematológico</label>
         </div>
       </div>
-
-      <!-- Diagnóstico -->
       <div class="modal-section">
         <h3>Diagnóstico/s</h3>
         <div class="form-group"><textarea id="f-diagnostico" placeholder="Diagnósticos separados por coma o líneas..."></textarea></div>
       </div>
-
-      <!-- Antibióticos -->
       <div class="modal-section">
         <h3>Antibiótico/s</h3>
         <div class="abx-list" id="abx-list"></div>
         <button class="btn-add" onclick="addAbxRow()">+ Agregar antibiótico</button>
       </div>
-
-      <!-- Antecedentes -->
       <div class="modal-section">
         <h3>Antecedentes y motivo de interconsulta</h3>
         <div class="form-group"><textarea id="f-antecedentes" placeholder="Antecedentes relevantes y motivo de la interconsulta..."></textarea></div>
       </div>
-
-      <!-- Evolución -->
       <div class="modal-section">
         <h3>Evolución diaria</h3>
         <div class="evol-list" id="evol-list"></div>
         <button class="btn-add" onclick="addEvolRow()">+ Agregar entrada</button>
       </div>
-
-      <!-- Exámenes -->
       <div class="modal-section">
         <h3>Exámenes complementarios</h3>
         <div class="form-group"><textarea id="f-examenes" placeholder="Laboratorio, imágenes, etc..."></textarea></div>
       </div>
-
-      <!-- Microbiología -->
       <div class="modal-section">
         <h3>Estudios microbiológicos</h3>
         <div class="cultivo-entries" id="cultivo-list"></div>
         <button class="btn-add" onclick="addCultivoRow()">+ Agregar estudio microbiológico</button>
       </div>
-
-      <!-- Serologías -->
       <div class="modal-section">
         <h3>Serologías</h3>
         <div class="form-group"><textarea id="f-serologias" placeholder="VIH, Hepatitis B/C, VDRL, Chagas, etc..."></textarea></div>
       </div>
-
-      <!-- Pendientes -->
       <div class="modal-section">
-        <h3>⏳ Pendientes</h3>
+        <h3>&#x23F3; Pendientes</h3>
         <div class="pendientes-list" id="pendientes-list"></div>
         <button class="btn-add" onclick="addPendienteRow()">+ Agregar pendiente</button>
       </div>
-
     </div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
@@ -497,13 +455,12 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
   </div>
 </div>
 
-<!-- MODAL DETALLE -->
 <div id="modal-detail-overlay" class="modal-overlay"></div>
 <div id="modal-detail-wrap" class="modal-scroll-wrap" style="display:none" onclick="if(event.target===this)closeDetailModal()">
   <div class="modal">
     <div class="modal-header">
       <h2 id="detail-title">Paciente</h2>
-      <button class="modal-close" onclick="closeDetailModal()">✕</button>
+      <button class="modal-close" onclick="closeDetailModal()">&#x2715;</button>
     </div>
     <div class="modal-body" id="detail-body"></div>
     <div class="modal-footer" id="detail-footer"></div>
@@ -511,740 +468,106 @@ mark{background:#fef9c3;border-radius:2px;padding:0 2px}
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════════
-const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
-const BIN_ID  = '6a1044fc6610dd3ae88931c6';
-const API_KEY = '$2a$10$6c0dZOH07xqt.KdlmrNBgeR5v89c1ip3gDlbbBIZTQwXgxDgp7J/u';
+const JSONBIN_BASE='https://api.jsonbin.io/v3/b';
+const BIN_ID='6a1044fc6610dd3ae88931c6';
+const API_KEY='$2a$10$6c0dZOH07xqt.KdlmrNBgeR5v89c1ip3gDlbbBIZTQwXgxDgp7J/u';
+const SALAS=['NEUROTÓXICO','SALA 3','SALA 2','UTI','TRAUMA MUJERES','TRAUMA HOMBRES','SALA 5/UPROT','SALA 6','SALA 7','PLÁSTICA','SALA 8/UCO','GINECOLOGÍA Y MATERNIDAD','SALA POLICIAL'];
+const USUARIOS=[{user:'infectologia',pass:'cullen2025'},{user:'admin',pass:'hcullen#inf'}];
+let patients=[],editMode=false,editingId=null,currentView='pase',searchQuery='';
 
-const SALAS = [
-  'NEUROTÓXICO','SALA 3','SALA 2','UTI','TRAUMA MUJERES',
-  'TRAUMA HOMBRES','SALA 5/UPROT','SALA 6','SALA 7',
-  'PLÁSTICA','SALA 8/UCO','GINECOLOGÍA Y MATERNIDAD','SALA POLICIAL'
-];
+function checkSession(){try{const s=sessionStorage.getItem('infect_session');if(!s)return false;const{ts}=JSON.parse(s);return(Date.now()-ts)<8*3600*1000;}catch{return false;}}
+function doLogin(){const user=document.getElementById('login-user').value.trim().toLowerCase();const pass=document.getElementById('login-pass').value;if(USUARIOS.some(u=>u.user===user&&u.pass===pass)){sessionStorage.setItem('infect_session',JSON.stringify({user,ts:Date.now()}));document.getElementById('login-error').classList.remove('show');initApp();}else{document.getElementById('login-error').classList.add('show');document.getElementById('login-pass').value='';document.getElementById('login-pass').focus();const box=document.querySelector('.login-box');box.style.animation='none';void box.offsetHeight;box.style.animation='shake .4s ease';}}
+function doLogout(){if(!confirm('¿Cerrar sesión?'))return;sessionStorage.removeItem('infect_session');location.reload();}
+function initApp(){document.getElementById('login-screen').style.display='none';document.getElementById('navbar').style.display='block';document.querySelector('main').style.display='block';populateSalas();loadData();}
 
-const USUARIOS = [
-  { user:'infectologia', pass:'cullen2025' },
-  { user:'admin',        pass:'hcullen#inf' }
-];
+async function loadData(){try{const r=await fetch(`${JSONBIN_BASE}/${BIN_ID}/latest`,{headers:{'X-Master-Key':API_KEY}});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();patients=j.record.patients||[];renderAll();}catch(e){showToast('Error al cargar: '+e.message,'error');patients=[];renderAll();}}
+async function saveData(){const r=await fetch(`${JSONBIN_BASE}/${BIN_ID}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify({patients})});if(!r.ok)throw new Error('HTTP '+r.status);}
 
-// ═══════════════════════════════════════════
-// ESTADO
-// ═══════════════════════════════════════════
-let patients = [];
-let editMode = false;
-let editingId = null;
-let currentView = 'pase';
-let searchQuery = '';
+function showView(v){currentView=v;document.querySelectorAll('.view-pane').forEach(p=>p.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',['pase','pacientes','altas','cultivos'][i%4]===v));renderAll();}
+function toggleMobile(){document.getElementById('mobile-menu').classList.toggle('open');}
+function toggleMode(){editMode=!editMode;document.getElementById('mode-label').textContent=editMode?'Modo Edición':'Modo Vista';const mlm=document.getElementById('mode-label-m');if(mlm)mlm.textContent=editMode?'Modo Edición':'Modo Vista';document.getElementById('btn-mode').classList.toggle('edit-active',editMode);document.getElementById('btn-new').style.display=editMode?'flex':'none';const bnm=document.getElementById('btn-new-m');if(bnm)bnm.style.display=editMode?'flex':'none';document.getElementById('th-actions').style.display=editMode?'':'none';renderAll();}
+function onSearch(q){searchQuery=q.toLowerCase().trim();renderAll();}
 
-// ═══════════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════════
-function checkSession() {
-  try {
-    const s = sessionStorage.getItem('infect_session');
-    if (!s) return false;
-    const { ts } = JSON.parse(s);
-    return (Date.now() - ts) < 8 * 3600 * 1000;
-  } catch { return false; }
-}
+function fmtDate(d){if(!d)return '—';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+function diasDesde(f){if(!f)return null;const hoy=new Date();hoy.setHours(0,0,0,0);return Math.floor((hoy-new Date(f+'T00:00:00'))/86400000);}
+function abxActivos(p){const hoy=new Date();hoy.setHours(0,0,0,0);return(p.antibioticos||[]).filter(a=>{if(!a.nombre)return false;const ini=a.inicio?new Date(a.inicio+'T00:00:00'):null;if(ini&&ini>hoy)return false;if(a.fin)return new Date(a.fin+'T00:00:00')>=hoy;return true;});}
+function hl(str){if(!searchQuery||!str)return str||'';const re=new RegExp('('+searchQuery.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');return str.replace(re,'<mark>$1</mark>');}
+function estadoCultivoInfo(e){const m={positivo:{cls:'positivo',label:'Positivo',badge:'badge-red'},negativo:{cls:'negativo',label:'Sin desarrollo',badge:'badge-green'},contaminado:{cls:'',label:'Contaminado',badge:'badge-yellow'}};return m[e]||{cls:'',label:'En curso',badge:'badge-yellow'};}
+function filtered(){if(!searchQuery)return patients;return patients.filter(p=>(p.nombre||'').toLowerCase().includes(searchQuery)||(p.dni||'').includes(searchQuery)||(p.diagnostico||'').toLowerCase().includes(searchQuery));}
 
-function doLogin() {
-  const user = document.getElementById('login-user').value.trim().toLowerCase();
-  const pass = document.getElementById('login-pass').value;
-  if (USUARIOS.some(u => u.user === user && u.pass === pass)) {
-    sessionStorage.setItem('infect_session', JSON.stringify({ user, ts: Date.now() }));
-    document.getElementById('login-error').classList.remove('show');
-    initApp();
-  } else {
-    document.getElementById('login-error').classList.add('show');
-    document.getElementById('login-pass').value = '';
-    document.getElementById('login-pass').focus();
-    const box = document.querySelector('.login-box');
-    box.style.animation = 'none';
-    void box.offsetHeight;
-    box.style.animation = 'shake .4s ease';
-  }
-}
-
-function doLogout() {
-  if (!confirm('¿Cerrar sesión?')) return;
-  sessionStorage.removeItem('infect_session');
-  location.reload();
-}
-
-function initApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('navbar').style.display = 'block';
-  document.querySelector('main').style.display = 'block';
-  populateSalas();
-  loadData();
-}
-
-// ═══════════════════════════════════════════
-// JSONBIN
-// ═══════════════════════════════════════════
-async function loadData() {
-  try {
-    const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': API_KEY }
-    });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const j = await r.json();
-    patients = j.record.patients || [];
-    renderAll();
-  } catch(e) {
-    showToast('Error al cargar datos: ' + e.message, 'error');
-    patients = [];
-    renderAll();
-  }
-}
-
-async function saveData() {
-  const r = await fetch(`${JSONBIN_BASE}/${BIN_ID}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-    body: JSON.stringify({ patients })
-  });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-}
-
-// ═══════════════════════════════════════════
-// NAVEGACIÓN
-// ═══════════════════════════════════════════
-function showView(v) {
-  currentView = v;
-  document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById('view-' + v).classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach((t, i) => {
-    t.classList.toggle('active', ['pase','pacientes','altas','cultivos'][i % 4] === v);
-  });
-  renderAll();
-}
-
-function toggleMobile() { document.getElementById('mobile-menu').classList.toggle('open'); }
-
-function toggleMode() {
-  editMode = !editMode;
-  document.getElementById('mode-label').textContent = editMode ? 'Modo Edición' : 'Modo Vista';
-  const mlm = document.getElementById('mode-label-m');
-  if (mlm) mlm.textContent = editMode ? 'Modo Edición' : 'Modo Vista';
-  document.getElementById('btn-mode').classList.toggle('edit-active', editMode);
-  document.getElementById('btn-new').style.display = editMode ? 'flex' : 'none';
-  const bnm = document.getElementById('btn-new-m');
-  if (bnm) bnm.style.display = editMode ? 'flex' : 'none';
-  document.getElementById('th-actions').style.display = editMode ? '' : 'none';
-  renderAll();
-}
-
-function onSearch(q) { searchQuery = q.toLowerCase().trim(); renderAll(); }
-
-// ═══════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════
-function fmtDate(d) {
-  if (!d) return '—';
-  const [y,m,day] = d.split('-');
-  return `${day}/${m}/${y}`;
-}
-
-function diasDesde(f) {
-  if (!f) return null;
-  const hoy = new Date(); hoy.setHours(0,0,0,0);
-  return Math.floor((hoy - new Date(f + 'T00:00:00')) / 86400000);
-}
-
-function abxActivos(p) {
-  const hoy = new Date(); hoy.setHours(0,0,0,0);
-  return (p.antibioticos || []).filter(a => {
-    if (!a.nombre) return false;
-    const ini = a.inicio ? new Date(a.inicio + 'T00:00:00') : null;
-    if (ini && ini > hoy) return false;
-    if (a.fin) return new Date(a.fin + 'T00:00:00') >= hoy;
-    return true;
-  });
-}
-
-function hl(str) {
-  if (!searchQuery || !str) return str || '';
-  const re = new RegExp('(' + searchQuery.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
-  return str.replace(re, '<mark>$1</mark>');
-}
-
-function estadoCultivoInfo(estado) {
-  const m = { positivo:{cls:'positivo',label:'Positivo',badge:'badge-red'},
-              negativo:{cls:'negativo',label:'Sin desarrollo',badge:'badge-green'},
-              contaminado:{cls:'',label:'Contaminado',badge:'badge-yellow'} };
-  return m[estado] || {cls:'',label:'En curso',badge:'badge-yellow'};
-}
-
-function filtered() {
-  if (!searchQuery) return patients;
-  return patients.filter(p =>
-    (p.nombre||'').toLowerCase().includes(searchQuery) ||
-    (p.dni||'').includes(searchQuery) ||
-    (p.diagnostico||'').toLowerCase().includes(searchQuery)
-  );
-}
-
-// ═══════════════════════════════════════════
-// PASE
-// ═══════════════════════════════════════════
-function renderAbxPase(p) {
-  const act = abxActivos(p);
-  const src = act.length ? act : (p.antibioticos || []).slice(-1);
-  return src.map(a => {
-    const d = diasDesde(a.inicio);
-    return `<span class="badge badge-blue">${a.nombre}${d !== null ? ' · día ' + d : ''}</span>`;
-  }).join(' ') || '';
-}
-
-function renderPendientesBadges(p) {
-  const pend = [...(p.pendientes || [])];
-  if (!pend.length) {
-    const cultEc = (p.cultivos || []).filter(c => c.estado === 'en_curso');
-    if (cultEc.length) pend.push(`Cultivo${cultEc.length > 1 ? 's' : ''} (${cultEc.length})`);
-  }
-  if (!pend.length) return '';
-  return `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:3px">
-    <span style="font-size:10px;color:#92400e;font-weight:600;align-self:center">⏳</span>
-    ${pend.map(x => `<span class="badge badge-yellow">${x}</span>`).join('')}
-  </div>`;
-}
-
-function renderPase() {
-  const activos = filtered().filter(p => !p.alta);
-  document.getElementById('pase-meta').textContent =
-    `${activos.length} paciente${activos.length !== 1 ? 's' : ''} · ${new Date().toLocaleDateString('es-AR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}`;
-  document.getElementById('pase-grid').innerHTML = SALAS.map(sala => {
-    const sp = activos.filter(p => p.sala === sala);
-    return `<div class="sala-card">
-      <div class="sala-header"><span class="sala-name">${sala}</span><span class="sala-count">${sp.length}</span></div>
-      <div class="sala-patients">${sp.length
-        ? sp.map(p => `<div class="patient-row" onclick="openDetail('${p.id}')">
-            <div class="patient-name">
-              ${hl(p.nombre)}
-              ${p.alta ? '<span class="badge badge-alta">Alta</span>' : ''}
-              ${p.inmunocomprometido ? `<span class="badge badge-red" title="${(p.tiposInmuno||[]).join(', ')}">🛡 IC</span>` : ''}
-            </div>
-            <div class="patient-dni">DNI ${hl(p.dni)}</div>
-            <div class="patient-diag">${hl(p.diagnostico || '—')}</div>
-            <div class="patient-abx">${renderAbxPase(p)}</div>
-            ${renderPendientesBadges(p)}
-          </div>`).join('')
-        : '<div class="sala-empty">Sin pacientes</div>'
-      }</div>
-    </div>`;
-  }).join('');
-}
-
-// ═══════════════════════════════════════════
-// PACIENTES
-// ═══════════════════════════════════════════
-function renderPacientes() {
-  const all = filtered().filter(p => !p.alta);
-  document.getElementById('pac-meta').textContent = `${all.length} paciente${all.length !== 1 ? 's' : ''}`;
-  document.getElementById('pac-tbody').innerHTML = all.length
-    ? all.map(p => {
-        const lastE = (p.evoluciones || []).slice(-1)[0];
-        const cultStr = (p.cultivos || []).map(c => {
-          const info = estadoCultivoInfo(c.estado);
-          return `<span class="badge ${info.badge}" style="font-size:10px">${info.label}</span> <span style="font-size:11px">${c.muestra||''}</span>`;
-        }).join('<br>') || hl(p.microbiologia || '—');
-        return `<tr onclick="openDetail('${p.id}')" style="cursor:pointer">
-          <td class="td-name">${hl(p.nombre)}</td>
-          <td class="td-mono">${hl(p.dni)}</td>
-          <td><span class="badge badge-gray">${p.sala||'—'}</span></td>
-          <td class="td-long">${hl(p.diagnostico||'—')}</td>
-          <td class="td-long">${(p.antibioticos||[]).map(a =>
-            `<div><span class="badge badge-blue">${a.nombre}</span> <span style="font-size:11px;color:#64748b;font-family:var(--mono)">${fmtDate(a.inicio)}→${fmtDate(a.fin)||'?'}</span></div>`
-          ).join('') || '—'}</td>
-          <td class="td-long">${hl(p.antecedentes||'—')}</td>
-          <td class="td-long">${lastE ? `<div style="font-size:11px;color:#64748b;font-family:var(--mono)">${fmtDate(lastE.fecha)}</div>${hl(lastE.texto||'')}` : '—'}</td>
-          <td class="td-long">${hl(p.examenes||'—')}</td>
-          <td class="td-long">${cultStr}</td>
-          <td class="td-long">${hl(p.serologias||'—')}</td>
-          ${editMode ? `<td onclick="event.stopPropagation()">
-            <button class="btn-icon" onclick="openEditModal('${p.id}')">✏️</button>
-            <button class="btn-icon danger" onclick="deletePatient('${p.id}')">🗑</button>
-          </td>` : ''}
-        </tr>`;
-      }).join('')
-    : `<tr><td colspan="11" style="text-align:center;padding:40px;color:#94a3b8">Sin pacientes activos</td></tr>`;
-}
-
-// ═══════════════════════════════════════════
-// ALTAS
-// ═══════════════════════════════════════════
-function renderAltas() {
-  const all = filtered().filter(p => p.alta);
-  document.getElementById('alta-meta').textContent = `${all.length} paciente${all.length !== 1 ? 's' : ''} con alta`;
-  document.getElementById('altas-list').innerHTML = all.length
-    ? all.map(p => `<div class="alta-card" onclick="openDetail('${p.id}')">
-        <div class="alta-info">
-          <div class="name">${hl(p.nombre)}</div>
-          <div class="details">DNI ${hl(p.dni)} · ${p.sala||'—'}${p.fechaAlta ? ' · Alta: ' + fmtDate(p.fechaAlta) : ''}</div>
-          <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">${(p.antibioticos||[]).map(a => `<span class="badge badge-blue">${a.nombre}</span>`).join('')}</div>
-        </div>
-        ${editMode ? `<div onclick="event.stopPropagation()"><button class="btn-icon" onclick="openEditModal('${p.id}')">✏️</button><button class="btn-icon danger" onclick="deletePatient('${p.id}')">🗑</button></div>` : ''}
-      </div>`).join('')
-    : `<div class="empty-state"><div class="icon">📋</div><p>Sin altas registradas</p></div>`;
-}
-
-// ═══════════════════════════════════════════
-// CULTIVOS
-// ═══════════════════════════════════════════
-function renderCultivos() {
-  const all = filtered().filter(p => (p.cultivos && p.cultivos.length) || (p.microbiologia && p.microbiologia.trim()));
-  document.getElementById('cult-meta').textContent = `${all.length} paciente${all.length !== 1 ? 's' : ''} con cultivos`;
-  document.getElementById('cultivos-list').innerHTML = all.length
-    ? all.map(p => {
-        const cc = p.cultivos || [];
-        const haPos = cc.some(c => c.estado === 'positivo');
-        const allNeg = cc.length && cc.every(c => c.estado === 'negativo');
-        const hasCurso = cc.some(c => c.estado === 'en_curso');
-        const cardCls = haPos ? 'positivo' : allNeg ? 'negativo' : '';
-        const totalBadge = haPos ? 'badge-red' : allNeg ? 'badge-green' : 'badge-yellow';
-        const totalLabel = haPos ? 'Positivo' : allNeg ? 'Sin desarrollo' : hasCurso ? 'En curso' : 'Ver detalle';
-        const estudiosHtml = cc.length
-          ? `<div class="cultivo-studies">${cc.map(c => {
-              const info = estadoCultivoInfo(c.estado);
-              return `<div class="cultivo-study">
-                <div class="cultivo-study-header">
-                  <span class="cultivo-study-name">${c.muestra||'—'}</span>
-                  <div style="display:flex;align-items:center;gap:6px">
-                    <span class="cultivo-study-date">${fmtDate(c.fecha)}</span>
-                    <span class="badge ${info.badge}">${info.label}</span>
-                  </div>
-                </div>
-                ${c.resultado ? `<div class="cultivo-study-resultado">${c.resultado}</div>` : ''}
-              </div>`;
-            }).join('')}</div>`
-          : `<div style="margin-top:8px;font-size:13px;color:var(--text-secondary)">${p.microbiologia||''}</div>`;
-        return `<div class="cultivo-card ${cardCls}" onclick="openDetail('${p.id}')">
-          <div class="cultivo-top">
-            <div><div class="cultivo-patient">${hl(p.nombre)}</div>
-              <div class="cultivo-meta">DNI ${p.dni} · ${p.sala||'—'} · ${hl(p.diagnostico||'—')}</div></div>
-            <span class="badge ${totalBadge}">${totalLabel}</span>
-          </div>
-          ${estudiosHtml}
-          ${editMode ? `<div style="margin-top:8px" onclick="event.stopPropagation()"><button class="btn-icon" onclick="openEditModal('${p.id}')">✏️ Editar</button></div>` : ''}
-        </div>`;
-      }).join('')
-    : `<div class="empty-state"><div class="icon">🧫</div><p>Sin cultivos registrados</p></div>`;
-}
-
-function renderAll() { renderPase(); renderPacientes(); renderAltas(); renderCultivos(); }
-
-// ═══════════════════════════════════════════
-// MODALES - abrir/cerrar
-// ═══════════════════════════════════════════
-function openModal(wrapId, overlayId) {
-  document.getElementById(overlayId).style.display = 'block';
-  document.getElementById(wrapId).style.display = 'block';
-  document.getElementById(wrapId).scrollTop = 0;
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal(wrapId, overlayId) {
-  document.getElementById(overlayId).style.display = 'none';
-  document.getElementById(wrapId).style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-function openNewModal() {
-  editingId = null;
-  document.getElementById('modal-edit-title').textContent = 'Nueva interconsulta';
-  clearForm();
-  openModal('modal-edit-wrap', 'modal-edit-overlay');
-}
-
-function closeEditModal() { closeModal('modal-edit-wrap', 'modal-edit-overlay'); }
-function closeDetailModal() { closeModal('modal-detail-wrap', 'modal-detail-overlay'); }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeEditModal(); closeDetailModal(); }
-});
-
-// ═══════════════════════════════════════════
-// FORMULARIO
-// ═══════════════════════════════════════════
-function populateSalas() {
-  const sel = document.getElementById('f-sala');
-  sel.innerHTML = '<option value="">-- Seleccionar sala --</option>' +
-    SALAS.map(s => `<option value="${s}">${s}</option>`).join('');
-}
-
-function toggleInmuno() {
-  const on = document.getElementById('f-inmuno').checked;
-  document.getElementById('inmuno-options').style.display = on ? 'flex' : 'none';
-  if (!on) document.querySelectorAll('.inmuno-chip input').forEach(cb => {
-    cb.checked = false; cb.closest('.inmuno-chip').classList.remove('selected');
-  });
-}
-
-function syncChip(cb) {
-  cb.closest('.inmuno-chip').classList.toggle('selected', cb.checked);
-}
-
-function clearForm() {
-  ['f-nombre','f-dni','f-diagnostico','f-antecedentes','f-examenes','f-serologias',
-   'f-fecha-ingreso','f-fecha-interconsulta','f-fecha-alta'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('f-sala').value = '';
-  document.getElementById('f-alta').checked = false;
-  document.getElementById('f-inmuno').checked = false;
-  document.getElementById('inmuno-options').style.display = 'none';
-  document.querySelectorAll('.inmuno-chip input').forEach(cb => {
-    cb.checked = false; cb.closest('.inmuno-chip').classList.remove('selected');
-  });
-  ['abx-list','evol-list','cultivo-list','pendientes-list'].forEach(id => {
-    document.getElementById(id).innerHTML = '';
-  });
-}
-
-function openEditModal(id) {
-  editingId = id;
-  const p = patients.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('modal-edit-title').textContent = 'Editar: ' + p.nombre;
-  clearForm();
-  document.getElementById('f-nombre').value = p.nombre || '';
-  document.getElementById('f-dni').value = p.dni || '';
-  document.getElementById('f-sala').value = p.sala || '';
-  document.getElementById('f-alta').checked = !!p.alta;
-  document.getElementById('f-diagnostico').value = p.diagnostico || '';
-  document.getElementById('f-antecedentes').value = p.antecedentes || '';
-  document.getElementById('f-examenes').value = p.examenes || '';
-  document.getElementById('f-serologias').value = p.serologias || '';
-  document.getElementById('f-fecha-ingreso').value = p.fechaIngreso || '';
-  document.getElementById('f-fecha-interconsulta').value = p.fechaInterconsulta || '';
-  document.getElementById('f-fecha-alta').value = p.fechaAlta || '';
-  if (p.inmunocomprometido) {
-    document.getElementById('f-inmuno').checked = true;
-    document.getElementById('inmuno-options').style.display = 'flex';
-    (p.tiposInmuno || []).forEach(tipo => {
-      document.querySelectorAll('.inmuno-chip input').forEach(cb => {
-        if (cb.value === tipo) { cb.checked = true; cb.closest('.inmuno-chip').classList.add('selected'); }
-      });
+function renderAbxPase(p){const act=abxActivos(p);const src=act.length?act:(p.antibioticos||[]).slice(-1);return src.map(a=>{const d=diasDesde(a.inicio);return`<span class="badge badge-blue">${a.nombre}${d!==null?' · día '+d:''}</span>`;}).join(' ')||'';}
+function renderPendientesBadges(p){
+  const pend=[...(p.pendientes||[])];
+  // Agregar automáticamente cultivos en curso como pendientes
+  const ec=(p.cultivos||[]).filter(c=>c.estado==='en_curso');
+  if(ec.length){
+    ec.forEach(c=>{
+      const label=c.muestra?`Cultivo: ${c.muestra}`:'Cultivo en curso';
+      if(!pend.includes(label))pend.push(label);
     });
   }
-  (p.antibioticos || []).forEach(a => addAbxRow(a));
-  (p.evoluciones || []).forEach(e => addEvolRow(e));
-  (p.cultivos || []).forEach(c => addCultivoRow(c));
-  if ((!p.cultivos || !p.cultivos.length) && p.microbiologia) {
-    addCultivoRow({ muestra:'Texto libre', resultado:p.microbiologia, estado:'en_curso', fecha:'' });
-  }
-  (p.pendientes || []).forEach(t => addPendienteRow(t));
-  openModal('modal-edit-wrap', 'modal-edit-overlay');
+  if(!pend.length)return'';
+  return`<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:3px"><span style="font-size:10px;color:#92400e;font-weight:600;align-self:center">⏳</span>${pend.map(x=>`<span class="badge badge-yellow">${x}</span>`).join('')}</div>`;
 }
 
-function addAbxRow(data = {}) {
-  const row = document.createElement('div');
-  row.className = 'abx-row';
-  row.innerHTML = `
-    <input type="text" placeholder="Antibiótico" value="${data.nombre||''}">
-    <input type="date" value="${data.inicio||''}">
-    <input type="date" value="${data.fin||''}">
-    <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>`;
-  document.getElementById('abx-list').appendChild(row);
-}
+function renderPase(){const activos=filtered().filter(p=>!p.alta);document.getElementById('pase-meta').textContent=`${activos.length} paciente${activos.length!==1?'s':''} · ${new Date().toLocaleDateString('es-AR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}`;document.getElementById('pase-grid').innerHTML=SALAS.map(sala=>{const sp=activos.filter(p=>p.sala===sala);return`<div class="sala-card"><div class="sala-header"><span class="sala-name">${sala}</span><span class="sala-count">${sp.length}</span></div><div class="sala-patients">${sp.length?sp.map(p=>`<div class="patient-row" onclick="openDetail('${p.id}')"><div class="patient-name">${hl(p.nombre)}${p.alta?'<span class="badge badge-alta">Alta</span>':''}${p.inmunocomprometido?`<span class="badge badge-red" title="${(p.tiposInmuno||[]).join(', ')}">🛡 IC</span>`:''}</div><div class="patient-dni">DNI ${hl(p.dni)}</div><div class="patient-diag">${hl(p.diagnostico||'—')}</div><div class="patient-abx">${renderAbxPase(p)}</div>${renderPendientesBadges(p)}</div>`).join(''):'<div class="sala-empty">Sin pacientes</div>'}</div></div>`;}).join('');}
 
-function addEvolRow(data = {}) {
-  const row = document.createElement('div');
-  row.className = 'evol-row';
-  row.innerHTML = `
-    <input type="date" value="${data.fecha||new Date().toISOString().slice(0,10)}">
-    <textarea placeholder="Evolución del día...">${data.texto||''}</textarea>
-    <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>`;
-  document.getElementById('evol-list').appendChild(row);
-}
+function renderPacientes(){const all=filtered().filter(p=>!p.alta);document.getElementById('pac-meta').textContent=`${all.length} paciente${all.length!==1?'s':''}`;document.getElementById('pac-tbody').innerHTML=all.length?all.map(p=>{const lastE=(p.evoluciones||[]).slice(-1)[0];const cultStr=(p.cultivos||[]).map(c=>{const info=estadoCultivoInfo(c.estado);return`<span class="badge ${info.badge}" style="font-size:10px">${info.label}</span> <span style="font-size:11px">${c.muestra||''}</span>`;}).join('<br>')||hl(p.microbiologia||'—');return`<tr onclick="openDetail('${p.id}')" style="cursor:pointer"><td class="td-name">${hl(p.nombre)}</td><td class="td-mono">${hl(p.dni)}</td><td><span class="badge badge-gray">${p.sala||'—'}</span></td><td class="td-long">${hl(p.diagnostico||'—')}</td><td class="td-long">${(p.antibioticos||[]).map(a=>`<div><span class="badge badge-blue">${a.nombre}</span> <span style="font-size:11px;color:#64748b;font-family:var(--mono)">${fmtDate(a.inicio)}→${fmtDate(a.fin)||'?'}</span></div>`).join('')||'—'}</td><td class="td-long">${hl(p.antecedentes||'—')}</td><td class="td-long">${lastE?`<div style="font-size:11px;color:#64748b;font-family:var(--mono)">${fmtDate(lastE.fecha)}</div>${hl(lastE.texto||'')}`:' —'}</td><td class="td-long">${hl(p.examenes||'—')}</td><td class="td-long">${cultStr}</td><td class="td-long">${hl(p.serologias||'—')}</td>${editMode?`<td onclick="event.stopPropagation()"><button class="btn-icon" onclick="openEditModal('${p.id}')">✏️</button><button class="btn-icon danger" onclick="deletePatient('${p.id}')">🗑</button></td>`:''}</tr>`;}).join(''):`<tr><td colspan="11" style="text-align:center;padding:40px;color:#94a3b8">Sin pacientes activos</td></tr>`;}
 
-function addCultivoRow(data = {}) {
-  const row = document.createElement('div');
-  row.className = 'cultivo-entry-row';
-  const estados = [
-    {v:'en_curso',l:'En curso'},
-    {v:'positivo',l:'Positivo'},
-    {v:'negativo',l:'Negativo / Sin desarrollo'},
-    {v:'contaminado',l:'Contaminado'}
-  ];
-  row.innerHTML = `
-    <button class="btn-remove" style="position:absolute;top:6px;right:6px" onclick="this.parentElement.remove()">✕</button>
-    <div><div class="cultivo-entry-label">Fecha</div>
-      <input type="date" name="ce-fecha" value="${data.fecha||new Date().toISOString().slice(0,10)}"></div>
-    <div><div class="cultivo-entry-label">Muestra / Tipo</div>
-      <input type="text" name="ce-muestra" placeholder="Hemocultivo, Urocultivo, LCR..." value="${data.muestra||''}"></div>
-    <div class="ce-full"><div class="cultivo-entry-label">Resultado / Germen / Sensibilidad</div>
-      <textarea name="ce-resultado" placeholder="Klebsiella pneumoniae BLEE+, sensible a meropenem...">${data.resultado||''}</textarea></div>
-    <div class="ce-full"><div class="cultivo-entry-label">Estado</div>
-      <select name="ce-estado">${estados.map(e => `<option value="${e.v}" ${(data.estado||'en_curso')===e.v?'selected':''}>${e.l}</option>`).join('')}</select></div>`;
-  document.getElementById('cultivo-list').appendChild(row);
-}
+function renderAltas(){const all=filtered().filter(p=>p.alta);document.getElementById('alta-meta').textContent=`${all.length} paciente${all.length!==1?'s':''} con alta`;document.getElementById('altas-list').innerHTML=all.length?all.map(p=>{const inmunoHtml=p.inmunocomprometido&&(p.tiposInmuno||[]).length?`<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap"><span style="font-size:11px;font-weight:600;color:#991b1b">🛡</span>${(p.tiposInmuno||[]).map(t=>`<span class="badge badge-red">${t}</span>`).join('')}</div>`:'';return`<div class="alta-card" onclick="openDetail('${p.id}')"><div class="alta-info"><div class="name">${hl(p.nombre)}</div><div class="details">DNI ${hl(p.dni)}${p.fechaAlta?' · Alta: '+fmtDate(p.fechaAlta):''}</div>${p.diagnostico?`<div style="margin-top:4px;font-size:12.5px;color:var(--text)">${hl(p.diagnostico)}</div>`:''}${inmunoHtml}</div>${editMode?`<div onclick="event.stopPropagation()"><button class="btn-icon" onclick="openEditModal('${p.id}')">✏️</button><button class="btn-icon danger" onclick="deletePatient('${p.id}')">🗑</button></div>`:''}</div>`;}).join(''):`<div class="empty-state"><div class="icon">📋</div><p>Sin altas registradas</p></div>`;}
 
-function addPendienteRow(texto = '') {
-  const row = document.createElement('div');
-  row.className = 'pendiente-row';
-  row.innerHTML = `
-    <input type="text" placeholder="Ej: Hemocultivo x2, Galactomanano, RMN..." value="${texto}">
-    <button class="btn-remove" onclick="this.parentElement.remove()">✕</button>`;
-  document.getElementById('pendientes-list').appendChild(row);
-}
-
-async function savePatient() {
-  const nombre = document.getElementById('f-nombre').value.trim();
-  const dni    = document.getElementById('f-dni').value.trim();
-  const sala   = document.getElementById('f-sala').value;
-  if (!nombre || !dni || !sala) { showToast('Completá nombre, DNI y sala', 'error'); return; }
-
-  const antibioticos = Array.from(document.querySelectorAll('.abx-row')).map(r => {
-    const ins = r.querySelectorAll('input');
-    return { nombre:ins[0].value.trim(), inicio:ins[1].value, fin:ins[2].value };
-  }).filter(a => a.nombre);
-
-  const evoluciones = Array.from(document.querySelectorAll('.evol-row')).map(r => ({
-    fecha: r.querySelector('input[type=date]').value,
-    texto: r.querySelector('textarea').value.trim()
-  })).filter(e => e.texto);
-
-  const cultivos = Array.from(document.querySelectorAll('.cultivo-entry-row')).map(r => ({
-    fecha:     r.querySelector('[name=ce-fecha]').value,
-    muestra:   r.querySelector('[name=ce-muestra]').value.trim(),
-    resultado: r.querySelector('[name=ce-resultado]').value.trim(),
-    estado:    r.querySelector('[name=ce-estado]').value,
-  })).filter(c => c.muestra || c.resultado);
-
-  const pendientes = Array.from(document.querySelectorAll('.pendiente-row input'))
-    .map(i => i.value.trim()).filter(Boolean);
-
-  const tiposInmuno = Array.from(document.querySelectorAll('.inmuno-chip input:checked'))
-    .map(i => i.value);
-
-  const data = {
-    nombre, dni, sala,
-    alta: document.getElementById('f-alta').checked,
-    fechaIngreso:        document.getElementById('f-fecha-ingreso').value,
-    fechaInterconsulta:  document.getElementById('f-fecha-interconsulta').value,
-    fechaAlta:           document.getElementById('f-fecha-alta').value,
-    inmunocomprometido:  document.getElementById('f-inmuno').checked,
-    tiposInmuno,
-    diagnostico:   document.getElementById('f-diagnostico').value.trim(),
-    antibioticos,
-    antecedentes:  document.getElementById('f-antecedentes').value.trim(),
-    evoluciones,
-    examenes:      document.getElementById('f-examenes').value.trim(),
-    cultivos,
-    serologias:    document.getElementById('f-serologias').value.trim(),
-    pendientes,
-  };
-
-  if (editingId) {
-    const idx = patients.findIndex(x => x.id === editingId);
-    patients[idx] = { ...patients[idx], ...data };
-  } else {
-    data.id = 'p_' + Date.now();
-    data.createdAt = new Date().toISOString();
-    patients.push(data);
-  }
-
-  document.getElementById('loading').style.display = 'flex';
-  try {
-    await saveData();
-    closeEditModal();
-    renderAll();
-    showToast('Guardado correctamente', 'success');
-  } catch(e) {
-    showToast('Error al guardar: ' + e.message, 'error');
-  } finally {
-    document.getElementById('loading').style.display = 'none';
-  }
-}
-
-async function deletePatient(id) {
-  if (!confirm('¿Eliminar este paciente? No se puede deshacer.')) return;
-  patients = patients.filter(p => p.id !== id);
-  document.getElementById('loading').style.display = 'flex';
-  try {
-    await saveData(); renderAll(); showToast('Eliminado', 'success');
-  } catch(e) {
-    showToast('Error: ' + e.message, 'error');
-  } finally {
-    document.getElementById('loading').style.display = 'none';
-  }
-}
-
-// ═══════════════════════════════════════════
-// DETALLE
-// ═══════════════════════════════════════════
-function openDetail(id) {
-  const p = patients.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('detail-title').textContent = p.nombre;
-
-  const sec = (title, html) => `<div class="detail-section"><h3>${title}</h3>${html}</div>`;
-  const txt = v => `<div class="detail-content">${v||'—'}</div>`;
-
-  const cultHtml = (() => {
-    const cc = p.cultivos || [];
-    if (!cc.length && !p.microbiologia) return txt('');
-    if (!cc.length) return txt(p.microbiologia);
-    return cc.map(c => {
-      const info = estadoCultivoInfo(c.estado);
-      return `<div class="cultivo-study" style="margin-bottom:6px">
-        <div class="cultivo-study-header">
-          <span class="cultivo-study-name">${c.muestra||'—'}</span>
-          <div style="display:flex;align-items:center;gap:6px">
-            <span class="cultivo-study-date">${fmtDate(c.fecha)}</span>
-            <span class="badge ${info.badge}">${info.label}</span>
-          </div>
-        </div>
-        ${c.resultado ? `<div class="cultivo-study-resultado">${c.resultado}</div>` : ''}
-      </div>`;
-    }).join('');
-  })();
-
-  document.getElementById('detail-body').innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px">
-      <div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">DNI</div>
-        <div style="font-family:var(--mono);font-size:13px">${p.dni}</div></div>
-      <div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Sala</div>
-        <span class="badge badge-gray">${p.sala||'—'}</span>${p.alta ? ' <span class="badge badge-alta">Alta</span>' : ''}</div>
-      ${p.fechaIngreso ? `<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Ingreso</div>${fmtDate(p.fechaIngreso)}</div>` : ''}
-      ${p.fechaInterconsulta ? `<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Interconsulta</div>${fmtDate(p.fechaInterconsulta)}</div>` : ''}
-      ${p.fechaAlta ? `<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Alta seguimiento</div>${fmtDate(p.fechaAlta)}</div>` : ''}
-    </div>
-    ${p.inmunocomprometido ? `<div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:8px 12px;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span style="font-size:12px;font-weight:600;color:#991b1b">🛡 Inmunocomprometido</span>
-      ${(p.tiposInmuno||[]).map(t => `<span class="badge badge-red">${t}</span>`).join('')}
-    </div>` : ''}
-    ${(p.pendientes||[]).length ? `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:8px 12px;margin-bottom:14px">
-      <div style="font-size:11px;font-weight:600;color:#92400e;margin-bottom:6px">⏳ PENDIENTES</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px">${(p.pendientes||[]).map(t => `<span class="badge-pendiente">${t}</span>`).join('')}</div>
-    </div>` : ''}
-    ${sec('Diagnóstico/s', txt(p.diagnostico))}
-    ${(p.antibioticos||[]).length ? sec('Antibiótico/s', `<table class="abx-table"><thead><tr><th>Antibiótico</th><th>Inicio</th><th>Fin</th></tr></thead><tbody>
-      ${(p.antibioticos||[]).map(a => `<tr><td style="font-weight:500">${a.nombre}</td><td>${fmtDate(a.inicio)}</td><td>${fmtDate(a.fin)||'—'}</td></tr>`).join('')}
-    </tbody></table>`) : ''}
-    ${sec('Antecedentes y motivo de interconsulta', txt(p.antecedentes))}
-    ${sec('Evolución diaria', (p.evoluciones||[]).length
-      ? (p.evoluciones||[]).slice().reverse().map(e =>
-          `<div class="evol-entry"><div class="evol-date">${fmtDate(e.fecha)}</div><div>${e.texto||''}</div></div>`
-        ).join('')
-      : txt(''))}
-    ${sec('Exámenes complementarios', txt(p.examenes))}
-    ${sec('Estudios microbiológicos', cultHtml)}
-    ${sec('Serologías', txt(p.serologias))}
-  `;
-
-  document.getElementById('detail-footer').innerHTML = editMode
-    ? `<button class="btn-cancel" onclick="closeDetailModal()">Cerrar</button>
-       <button class="btn-icon danger" onclick="closeDetailModal();deletePatient('${p.id}')" style="padding:8px 14px;font-size:13px">🗑 Eliminar</button>
-       <button class="btn-save" onclick="closeDetailModal();openEditModal('${p.id}')">✏️ Editar</button>`
-    : `<button class="btn-cancel" onclick="closeDetailModal()">Cerrar</button>`;
-
-  openModal('modal-detail-wrap', 'modal-detail-overlay');
-}
-
-// ═══════════════════════════════════════════
-// EXPORTACIÓN XLS
-// ═══════════════════════════════════════════
-function abxStr(p) {
-  return (p.antibioticos||[]).map(a =>
-    a.nombre + (a.inicio ? ' (inicio: ' + fmtDate(a.inicio) + ')' : '') + (a.fin ? ' → ' + fmtDate(a.fin) : '')
-  ).join(' | ') || '—';
-}
-function abxActivosStr(p) {
-  const act = abxActivos(p);
-  return (act.length ? act : (p.antibioticos||[]).slice(-1)).map(a => {
-    const d = diasDesde(a.inicio);
-    return a.nombre + (d !== null ? ' (día ' + d + ')' : '');
-  }).join(' | ') || '—';
-}
-function cultivosStr(p) {
-  return (p.cultivos||[]).map(c =>
-    [c.muestra, fmtDate(c.fecha), c.estado, c.resultado].filter(Boolean).join(' – ')
-  ).join(' | ') || (p.microbiologia||'—');
-}
-function lastEvolStr(p) {
-  const e = (p.evoluciones||[]).slice(-1)[0];
-  return e ? fmtDate(e.fecha) + ': ' + (e.texto||'') : '—';
-}
-
-function exportPase() {
-  const activos = patients.filter(p => !p.alta);
-  if (!activos.length) { showToast('No hay pacientes para exportar', 'error'); return; }
-  const hoy = new Date().toLocaleDateString('es-AR').replace(/\//g,'-');
-  const wb = XLSX.utils.book_new();
-  SALAS.forEach(sala => {
-    const sp = activos.filter(p => p.sala === sala);
-    if (!sp.length) return;
-    const ws = XLSX.utils.json_to_sheet(sp.map(p => ({
-      'Paciente': p.nombre||'', 'DNI': p.dni||'',
-      'F. Ingreso': fmtDate(p.fechaIngreso), 'F. Interconsulta': fmtDate(p.fechaInterconsulta),
-      'Diagnóstico/s': p.diagnostico||'', 'ATB activos': abxActivosStr(p), 'Todos los ATB': abxStr(p),
-      'Antecedentes/Motivo': p.antecedentes||'', 'Últ. evolución': lastEvolStr(p),
-      'Exámenes': p.examenes||'', 'Microbiología': cultivosStr(p), 'Serologías': p.serologias||'',
-      'Pendientes': (p.pendientes||[]).join(' | ')||'',
-      'Inmunocomprometido': p.inmunocomprometido ? 'Sí – ' + (p.tiposInmuno||[]).join(', ') : 'No',
-    })));
-    ws['!cols'] = [{wch:28},{wch:12},{wch:12},{wch:16},{wch:30},{wch:30},{wch:35},{wch:35},{wch:35},{wch:30},{wch:35},{wch:25},{wch:30},{wch:20}];
-    XLSX.utils.book_append_sheet(wb, ws, sala.substring(0,31));
+function renderCultivos(){
+  // Solo pacientes con al menos un cultivo en_curso
+  const all=filtered().filter(p=>{
+    const cc=p.cultivos||[];
+    return cc.some(c=>c.estado==='en_curso');
   });
-  const wsAll = XLSX.utils.json_to_sheet(activos.map(p => ({
-    'Sala':p.sala||'','Paciente':p.nombre||'','DNI':p.dni||'',
-    'F. Ingreso':fmtDate(p.fechaIngreso),'F. Interconsulta':fmtDate(p.fechaInterconsulta),
-    'Diagnóstico/s':p.diagnostico||'','ATB activos':abxActivosStr(p),
-    'Pendientes':(p.pendientes||[]).join(' | ')||'',
-    'Inmunocomprometido':p.inmunocomprometido?'Sí – '+(p.tiposInmuno||[]).join(', '):'No',
-  })));
-  wsAll['!cols'] = [{wch:20},{wch:28},{wch:12},{wch:12},{wch:16},{wch:30},{wch:30},{wch:30},{wch:20}];
-  XLSX.utils.book_append_sheet(wb, wsAll, 'RESUMEN');
-  XLSX.writeFile(wb, 'Pase_Infectologia_' + hoy + '.xlsx');
-  showToast('Exportado correctamente', 'success');
-}
+  document.getElementById('cult-meta').textContent=`${all.length} paciente${all.length!==1?'s':''} con cultivos en curso`;
+  document.getElementById('cultivos-list').innerHTML=all.length?all.map(p=>{
+    const cc=(p.cultivos||[]).filter(c=>c.estado==='en_curso');
+    const estudiosHtml=`<div class="cultivo-studies">${cc.map(c=>`<div class="cultivo-study"><div class="cultivo-study-header"><span class="cultivo-study-name">${c.muestra||'—'}</span><span class="cultivo-study-date">${fmtDate(c.fecha)}</span></div>${c.resultado?`<div class="cultivo-study-resultado">${c.resultado}</div>`:''}</div>`).join('')}</div>`;
+    return`<div class="cultivo-card" onclick="openDetail('${p.id}')"><div class="cultivo-top"><div><div class="cultivo-patient">${hl(p.nombre)}</div><div class="cultivo-meta">DNI ${p.dni} · ${p.sala||'—'} · ${hl(p.diagnostico||'—')}</div></div><span class="badge badge-yellow">En curso</span></div>${estudiosHtml}${editMode?`<div style="margin-top:8px" onclick="event.stopPropagation()"><button class="btn-icon" onclick="openEditModal('${p.id}')">✏️ Editar</button></div>`:''}</div>`;
+  }).join(''):`<div class="empty-state"><div class="icon">🧫</div><p>Sin cultivos en curso</p></div>`;}
 
-function exportAltas() {
-  const altas = patients.filter(p => p.alta);
-  if (!altas.length) { showToast('No hay altas para exportar', 'error'); return; }
-  const hoy = new Date().toLocaleDateString('es-AR').replace(/\//g,'-');
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(altas.map(p => ({
-    'Paciente':p.nombre||'','DNI':p.dni||'','Sala':p.sala||'',
-    'F. Ingreso':fmtDate(p.fechaIngreso),'F. Interconsulta':fmtDate(p.fechaInterconsulta),'F. Alta':fmtDate(p.fechaAlta),
-    'Diagnóstico/s':p.diagnostico||'','Antibiótico/s':abxStr(p),
-    'Antecedentes':p.antecedentes||'','Exámenes':p.examenes||'',
-    'Microbiología':cultivosStr(p),'Serologías':p.serologias||'',
-    'Inmunocomprometido':p.inmunocomprometido?'Sí – '+(p.tiposInmuno||[]).join(', '):'No',
-  })));
-  ws['!cols'] = [{wch:28},{wch:12},{wch:18},{wch:12},{wch:16},{wch:16},{wch:30},{wch:35},{wch:35},{wch:30},{wch:35},{wch:25},{wch:20}];
-  XLSX.utils.book_append_sheet(wb, ws, 'Altas de seguimiento');
-  XLSX.writeFile(wb, 'Altas_Infectologia_' + hoy + '.xlsx');
-  showToast('Exportado correctamente', 'success');
-}
+function renderAll(){renderPase();renderPacientes();renderAltas();renderCultivos();}
 
-// ═══════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════
+function openModal(wrapId,overlayId){document.getElementById(overlayId).style.display='block';document.getElementById(wrapId).style.display='block';document.getElementById(wrapId).scrollTop=0;document.body.style.overflow='hidden';}
+function closeModal(wrapId,overlayId){document.getElementById(overlayId).style.display='none';document.getElementById(wrapId).style.display='none';document.body.style.overflow='';}
+function openNewModal(){editingId=null;document.getElementById('modal-edit-title').textContent='Nueva interconsulta';clearForm();openModal('modal-edit-wrap','modal-edit-overlay');}
+function closeEditModal(){closeModal('modal-edit-wrap','modal-edit-overlay');}
+function closeDetailModal(){closeModal('modal-detail-wrap','modal-detail-overlay');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditModal();closeDetailModal();}});
+
+function populateSalas(){const sel=document.getElementById('f-sala');sel.innerHTML='<option value="">-- Seleccionar sala --</option>'+SALAS.map(s=>`<option value="${s}">${s}</option>`).join('');}
+function toggleInmuno(){const on=document.getElementById('f-inmuno').checked;document.getElementById('inmuno-options').style.display=on?'flex':'none';if(!on)document.querySelectorAll('.inmuno-chip input').forEach(cb=>{cb.checked=false;cb.closest('.inmuno-chip').classList.remove('selected');});}
+function syncChip(cb){cb.closest('.inmuno-chip').classList.toggle('selected',cb.checked);}
+function clearForm(){['f-nombre','f-dni','f-diagnostico','f-antecedentes','f-examenes','f-serologias','f-fecha-ingreso','f-fecha-interconsulta','f-fecha-alta'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('f-sala').value='';document.getElementById('f-alta').checked=false;document.getElementById('f-inmuno').checked=false;document.getElementById('inmuno-options').style.display='none';document.querySelectorAll('.inmuno-chip input').forEach(cb=>{cb.checked=false;cb.closest('.inmuno-chip').classList.remove('selected');});['abx-list','evol-list','cultivo-list','pendientes-list'].forEach(id=>document.getElementById(id).innerHTML='');}
+
+function openEditModal(id){editingId=id;const p=patients.find(x=>x.id===id);if(!p)return;document.getElementById('modal-edit-title').textContent='Editar: '+p.nombre;clearForm();document.getElementById('f-nombre').value=p.nombre||'';document.getElementById('f-dni').value=p.dni||'';document.getElementById('f-sala').value=p.sala||'';document.getElementById('f-alta').checked=!!p.alta;document.getElementById('f-diagnostico').value=p.diagnostico||'';document.getElementById('f-antecedentes').value=p.antecedentes||'';document.getElementById('f-examenes').value=p.examenes||'';document.getElementById('f-serologias').value=p.serologias||'';document.getElementById('f-fecha-ingreso').value=p.fechaIngreso||'';document.getElementById('f-fecha-interconsulta').value=p.fechaInterconsulta||'';document.getElementById('f-fecha-alta').value=p.fechaAlta||'';if(p.inmunocomprometido){document.getElementById('f-inmuno').checked=true;document.getElementById('inmuno-options').style.display='flex';(p.tiposInmuno||[]).forEach(tipo=>document.querySelectorAll('.inmuno-chip input').forEach(cb=>{if(cb.value===tipo){cb.checked=true;cb.closest('.inmuno-chip').classList.add('selected');}}));}(p.antibioticos||[]).forEach(a=>addAbxRow(a));(p.evoluciones||[]).forEach(e=>addEvolRow(e));(p.cultivos||[]).forEach(c=>addCultivoRow(c));if((!p.cultivos||!p.cultivos.length)&&p.microbiologia)addCultivoRow({muestra:'Texto libre',resultado:p.microbiologia,estado:'en_curso',fecha:''});(p.pendientes||[]).forEach(t=>addPendienteRow(t));openModal('modal-edit-wrap','modal-edit-overlay');}
+
+function addAbxRow(data={}){const row=document.createElement('div');row.className='abx-row';row.innerHTML=`<input type="text" placeholder="Antibiótico" value="${data.nombre||''}"><input type="date" value="${data.inicio||''}"><input type="date" value="${data.fin||''}"><button class="btn-remove" onclick="this.parentElement.remove()">&#x2715;</button>`;document.getElementById('abx-list').appendChild(row);}
+function addEvolRow(data={}){const row=document.createElement('div');row.className='evol-row';row.innerHTML=`<input type="date" value="${data.fecha||new Date().toISOString().slice(0,10)}"><textarea placeholder="Evolución del día...">${data.texto||''}</textarea><button class="btn-remove" onclick="this.parentElement.remove()">&#x2715;</button>`;document.getElementById('evol-list').appendChild(row);}
+function addCultivoRow(data={}){const row=document.createElement('div');row.className='cultivo-entry-row';const estados=[{v:'en_curso',l:'En curso'},{v:'positivo',l:'Positivo'},{v:'negativo',l:'Negativo / Sin desarrollo'},{v:'contaminado',l:'Contaminado'}];row.innerHTML=`<button class="btn-remove" style="position:absolute;top:6px;right:6px" onclick="this.parentElement.remove()">&#x2715;</button><div><div class="cultivo-entry-label">Fecha</div><input type="date" name="ce-fecha" value="${data.fecha||new Date().toISOString().slice(0,10)}"></div><div><div class="cultivo-entry-label">Muestra / Tipo</div><input type="text" name="ce-muestra" placeholder="Hemocultivo, Urocultivo, LCR..." value="${data.muestra||''}"></div><div class="ce-full"><div class="cultivo-entry-label">Resultado / Germen / Sensibilidad</div><textarea name="ce-resultado" placeholder="Klebsiella pneumoniae BLEE+...">${data.resultado||''}</textarea></div><div class="ce-full"><div class="cultivo-entry-label">Estado</div><select name="ce-estado">${estados.map(e=>`<option value="${e.v}" ${(data.estado||'en_curso')===e.v?'selected':''}>${e.l}</option>`).join('')}</select></div>`;document.getElementById('cultivo-list').appendChild(row);}
+function addPendienteRow(texto=''){const row=document.createElement('div');row.className='pendiente-row';row.innerHTML=`<input type="text" placeholder="Ej: Hemocultivo x2, Galactomanano, RMN..." value="${texto}"><button class="btn-remove" onclick="this.parentElement.remove()">&#x2715;</button>`;document.getElementById('pendientes-list').appendChild(row);}
+
+async function savePatient(){const nombre=document.getElementById('f-nombre').value.trim();const dni=document.getElementById('f-dni').value.trim();const sala=document.getElementById('f-sala').value;if(!nombre||!dni||!sala){showToast('Completá nombre, DNI y sala','error');return;}const antibioticos=Array.from(document.querySelectorAll('.abx-row')).map(r=>{const ins=r.querySelectorAll('input');return{nombre:ins[0].value.trim(),inicio:ins[1].value,fin:ins[2].value};}).filter(a=>a.nombre);const evoluciones=Array.from(document.querySelectorAll('.evol-row')).map(r=>({fecha:r.querySelector('input[type=date]').value,texto:r.querySelector('textarea').value.trim()})).filter(e=>e.texto);const cultivos=Array.from(document.querySelectorAll('.cultivo-entry-row')).map(r=>({fecha:r.querySelector('[name=ce-fecha]').value,muestra:r.querySelector('[name=ce-muestra]').value.trim(),resultado:r.querySelector('[name=ce-resultado]').value.trim(),estado:r.querySelector('[name=ce-estado]').value})).filter(c=>c.muestra||c.resultado);const pendientes=Array.from(document.querySelectorAll('.pendiente-row input')).map(i=>i.value.trim()).filter(Boolean);const tiposInmuno=Array.from(document.querySelectorAll('.inmuno-chip input:checked')).map(i=>i.value);const data={nombre,dni,sala,alta:document.getElementById('f-alta').checked,fechaIngreso:document.getElementById('f-fecha-ingreso').value,fechaInterconsulta:document.getElementById('f-fecha-interconsulta').value,fechaAlta:document.getElementById('f-fecha-alta').value,inmunocomprometido:document.getElementById('f-inmuno').checked,tiposInmuno,diagnostico:document.getElementById('f-diagnostico').value.trim(),antibioticos,antecedentes:document.getElementById('f-antecedentes').value.trim(),evoluciones,examenes:document.getElementById('f-examenes').value.trim(),cultivos,serologias:document.getElementById('f-serologias').value.trim(),pendientes};if(editingId){const idx=patients.findIndex(x=>x.id===editingId);patients[idx]={...patients[idx],...data};}else{data.id='p_'+Date.now();data.createdAt=new Date().toISOString();patients.push(data);}document.getElementById('loading').style.display='flex';try{await saveData();closeEditModal();renderAll();showToast('Guardado correctamente','success');}catch(e){showToast('Error al guardar: '+e.message,'error');}finally{document.getElementById('loading').style.display='none';}}
+
+async function deletePatient(id){if(!confirm('¿Eliminar este paciente? No se puede deshacer.'))return;patients=patients.filter(p=>p.id!==id);document.getElementById('loading').style.display='flex';try{await saveData();renderAll();showToast('Eliminado','success');}catch(e){showToast('Error: '+e.message,'error');}finally{document.getElementById('loading').style.display='none';}}
+
+function openDetail(id){const p=patients.find(x=>x.id===id);if(!p)return;document.getElementById('detail-title').textContent=p.nombre;const sec=(title,html)=>`<div class="detail-section"><h3>${title}</h3>${html}</div>`;const txt=v=>`<div class="detail-content">${v||'—'}</div>`;const cultHtml=(()=>{const cc=p.cultivos||[];if(!cc.length&&!p.microbiologia)return txt('');if(!cc.length)return txt(p.microbiologia);return cc.map(c=>{const info=estadoCultivoInfo(c.estado);return`<div class="cultivo-study" style="margin-bottom:6px"><div class="cultivo-study-header"><span class="cultivo-study-name">${c.muestra||'—'}</span><div style="display:flex;align-items:center;gap:6px"><span class="cultivo-study-date">${fmtDate(c.fecha)}</span><span class="badge ${info.badge}">${info.label}</span></div></div>${c.resultado?`<div class="cultivo-study-resultado">${c.resultado}</div>`:''}</div>`;}).join('');})();document.getElementById('detail-body').innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px"><div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">DNI</div><div style="font-family:var(--mono);font-size:13px">${p.dni}</div></div><div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Sala</div><span class="badge badge-gray">${p.sala||'—'}</span>${p.alta?' <span class="badge badge-alta">Alta</span>':''}</div>${p.fechaIngreso?`<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Ingreso</div>${fmtDate(p.fechaIngreso)}</div>`:''} ${p.fechaInterconsulta?`<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Interconsulta</div>${fmtDate(p.fechaInterconsulta)}</div>`:''} ${p.fechaAlta?`<div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Alta seguimiento</div>${fmtDate(p.fechaAlta)}</div>`:''}</div>${p.inmunocomprometido?`<div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:8px 12px;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-size:12px;font-weight:600;color:#991b1b">🛡 Inmunocomprometido</span>${(p.tiposInmuno||[]).map(t=>`<span class="badge badge-red">${t}</span>`).join('')}</div>`:''}${(p.pendientes||[]).length?`<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:8px 12px;margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:#92400e;margin-bottom:6px">⏳ PENDIENTES</div><div style="display:flex;flex-wrap:wrap;gap:4px">${(p.pendientes||[]).map(t=>`<span class="badge-pendiente">${t}</span>`).join('')}</div></div>`:''}${sec('Diagnóstico/s',txt(p.diagnostico))}${(p.antibioticos||[]).length?sec('Antibiótico/s',`<table class="abx-table"><thead><tr><th>Antibiótico</th><th>Inicio</th><th>Fin</th></tr></thead><tbody>${(p.antibioticos||[]).map(a=>`<tr><td style="font-weight:500">${a.nombre}</td><td>${fmtDate(a.inicio)}</td><td>${fmtDate(a.fin)||'—'}</td></tr>`).join('')}</tbody></table>`):''}${sec('Antecedentes y motivo de interconsulta',txt(p.antecedentes))}${sec('Evolución diaria',(p.evoluciones||[]).length?(p.evoluciones||[]).slice().reverse().map(e=>`<div class="evol-entry"><div class="evol-date">${fmtDate(e.fecha)}</div><div>${e.texto||''}</div></div>`).join(''):txt(''))}${sec('Exámenes complementarios',txt(p.examenes))}${sec('Estudios microbiológicos',cultHtml)}${sec('Serologías',txt(p.serologias))}`;document.getElementById('detail-footer').innerHTML=editMode?`<button class="btn-cancel" onclick="closeDetailModal()">Cerrar</button><button class="btn-icon danger" onclick="closeDetailModal();deletePatient('${p.id}')" style="padding:8px 14px;font-size:13px">🗑 Eliminar</button><button class="btn-save" onclick="closeDetailModal();openEditModal('${p.id}')">✏️ Editar</button>`:`<button class="btn-cancel" onclick="closeDetailModal()">Cerrar</button>`;openModal('modal-detail-wrap','modal-detail-overlay');}
+
+function abxStr(p){return(p.antibioticos||[]).map(a=>a.nombre+(a.inicio?' (inicio: '+fmtDate(a.inicio)+')':'')+(a.fin?' → '+fmtDate(a.fin):'')).join(' | ')||'—';}
+function abxActivosStr(p){const act=abxActivos(p);return(act.length?act:(p.antibioticos||[]).slice(-1)).map(a=>{const d=diasDesde(a.inicio);return a.nombre+(d!==null?' (día '+d+')':'');}).join(' | ')||'—';}
+function cultivosStr(p){return(p.cultivos||[]).map(c=>[c.muestra,fmtDate(c.fecha),c.estado,c.resultado].filter(Boolean).join(' – ')).join(' | ')||(p.microbiologia||'—');}
+function lastEvolStr(p){const e=(p.evoluciones||[]).slice(-1)[0];return e?fmtDate(e.fecha)+': '+(e.texto||''):'—';}
+
+function exportPase(){const activos=patients.filter(p=>!p.alta);if(!activos.length){showToast('No hay pacientes para exportar','error');return;}const hoy=new Date().toLocaleDateString('es-AR').replace(/\//g,'-');const wb=XLSX.utils.book_new();SALAS.forEach(sala=>{const sp=activos.filter(p=>p.sala===sala);if(!sp.length)return;const ws=XLSX.utils.json_to_sheet(sp.map(p=>({'Paciente':p.nombre||'','DNI':p.dni||'','F. Ingreso':fmtDate(p.fechaIngreso),'F. Interconsulta':fmtDate(p.fechaInterconsulta),'Diagnóstico/s':p.diagnostico||'','ATB activos':abxActivosStr(p),'Todos los ATB':abxStr(p),'Antecedentes/Motivo':p.antecedentes||'','Últ. evolución':lastEvolStr(p),'Exámenes':p.examenes||'','Microbiología':cultivosStr(p),'Serologías':p.serologias||'','Pendientes':(p.pendientes||[]).join(' | ')||'','Inmunocomprometido':p.inmunocomprometido?'Sí – '+(p.tiposInmuno||[]).join(', '):'No'})));ws['!cols']=[{wch:28},{wch:12},{wch:12},{wch:16},{wch:30},{wch:30},{wch:35},{wch:35},{wch:35},{wch:30},{wch:35},{wch:25},{wch:30},{wch:20}];XLSX.utils.book_append_sheet(wb,ws,sala.substring(0,31));});const wsAll=XLSX.utils.json_to_sheet(activos.map(p=>({'Sala':p.sala||'','Paciente':p.nombre||'','DNI':p.dni||'','F. Ingreso':fmtDate(p.fechaIngreso),'F. Interconsulta':fmtDate(p.fechaInterconsulta),'Diagnóstico/s':p.diagnostico||'','ATB activos':abxActivosStr(p),'Pendientes':(p.pendientes||[]).join(' | ')||'','Inmunocomprometido':p.inmunocomprometido?'Sí – '+(p.tiposInmuno||[]).join(', '):'No'})));wsAll['!cols']=[{wch:20},{wch:28},{wch:12},{wch:12},{wch:16},{wch:30},{wch:30},{wch:30},{wch:20}];XLSX.utils.book_append_sheet(wb,wsAll,'RESUMEN');XLSX.writeFile(wb,'Pase_Infectologia_'+hoy+'.xlsx');showToast('Exportado correctamente','success');}
+function exportAltas(){const altas=patients.filter(p=>p.alta);if(!altas.length){showToast('No hay altas para exportar','error');return;}const hoy=new Date().toLocaleDateString('es-AR').replace(/\//g,'-');const wb=XLSX.utils.book_new();const ws=XLSX.utils.json_to_sheet(altas.map(p=>({'Paciente':p.nombre||'','DNI':p.dni||'','Sala':p.sala||'','F. Ingreso':fmtDate(p.fechaIngreso),'F. Interconsulta':fmtDate(p.fechaInterconsulta),'F. Alta':fmtDate(p.fechaAlta),'Diagnóstico/s':p.diagnostico||'','Antibiótico/s':abxStr(p),'Antecedentes':p.antecedentes||'','Exámenes':p.examenes||'','Microbiología':cultivosStr(p),'Serologías':p.serologias||'','Inmunocomprometido':p.inmunocomprometido?'Sí – '+(p.tiposInmuno||[]).join(', '):'No'})));ws['!cols']=[{wch:28},{wch:12},{wch:18},{wch:12},{wch:16},{wch:16},{wch:30},{wch:35},{wch:35},{wch:30},{wch:35},{wch:25},{wch:20}];XLSX.utils.book_append_sheet(wb,ws,'Altas de seguimiento');XLSX.writeFile(wb,'Altas_Infectologia_'+hoy+'.xlsx');showToast('Exportado correctamente','success');}
+
 let toastTimer;
-function showToast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast' + (type ? ' ' + type : '');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.add('hidden'), 3500);
-}
+function showToast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.add('hidden'),3500);}
 
-// ═══════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════
-if (checkSession()) {
-  initApp();
-} else {
-  setTimeout(() => document.getElementById('login-user').focus(), 100);
-}
+if(checkSession()){initApp();}else{setTimeout(()=>document.getElementById('login-user').focus(),100);}
 </script>
 </body>
-</html>
+  </html>
