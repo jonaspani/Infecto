@@ -493,7 +493,21 @@ function diasDesde(f){if(!f)return null;const hoy=new Date();hoy.setHours(0,0,0,
 function abxActivos(p){const hoy=new Date();hoy.setHours(0,0,0,0);return(p.antibioticos||[]).filter(a=>{if(!a.nombre)return false;const ini=a.inicio?new Date(a.inicio+'T00:00:00'):null;if(ini&&ini>hoy)return false;if(a.fin)return new Date(a.fin+'T00:00:00')>=hoy;return true;});}
 function hl(str){if(!searchQuery||!str)return str||'';const re=new RegExp('('+searchQuery.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');return str.replace(re,'<mark>$1</mark>');}
 function estadoCultivoInfo(e){const m={positivo:{cls:'positivo',label:'Positivo',badge:'badge-red'},negativo:{cls:'negativo',label:'Sin desarrollo',badge:'badge-green'},contaminado:{cls:'',label:'Contaminado',badge:'badge-yellow'}};return m[e]||{cls:'',label:'En curso',badge:'badge-yellow'};}
-function filtered(){if(!searchQuery)return patients;return patients.filter(p=>(p.nombre||'').toLowerCase().includes(searchQuery)||(p.dni||'').includes(searchQuery)||(p.diagnostico||'').toLowerCase().includes(searchQuery));}
+function filtered(){
+  if(!searchQuery)return patients;
+  return patients.filter(p=>{
+    const campos=[
+      p.nombre, p.dni, p.diagnostico, p.antecedentes,
+      p.examenes, p.serologias, p.sala,
+      ...(p.antibioticos||[]).map(a=>a.nombre),
+      ...(p.evoluciones||[]).map(e=>e.texto),
+      ...(p.cultivos||[]).flatMap(c=>[c.muestra,c.resultado]),
+      ...(p.pendientes||[]),
+      ...(p.tiposInmuno||[]),
+    ];
+    return campos.some(v=>(v||'').toLowerCase().includes(searchQuery));
+  });
+}
 
 function renderAbxPase(p){const act=abxActivos(p);const src=act.length?act:(p.antibioticos||[]).slice(-1);return src.map(a=>{const d=diasDesde(a.inicio);return`<span class="badge badge-blue">${a.nombre}${d!==null?' · día '+d:''}</span>`;}).join(' ')||'';}
 function renderPendientesBadges(p){
@@ -570,4 +584,4 @@ function showToast(msg,type=''){const t=document.getElementById('toast');t.textC
 if(checkSession()){initApp();}else{setTimeout(()=>document.getElementById('login-user').focus(),100);}
 </script>
 </body>
-  </html>
+</html>
